@@ -57,11 +57,18 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
 
 class Configuration(GeneralFieldsMixin, SocialProfileMixin):
     title = models.CharField(max_length=255)
+    short_title = models.CharField(max_length=25)
     description = models.TextField(null=True, blank=True)
+    newsletter = models.TextField(null=True, blank=True)
     logo = models.ImageField(upload_to='webapp_logos/', null=True, blank=True)
     favicon = models.ImageField(upload_to='webapp_favicons/', null=True, blank=True)
     bg_image = models.ImageField(upload_to='webapp_images/', null=True, blank=True)
     web_link = models.URLField(max_length=255, null=True, blank=True)
+    address = models.CharField(max_length=250, null=True, blank=True)
+    city = models.CharField(max_length=100, null=True, blank=True)
+    state = models.CharField(max_length=100, null=True, blank=True)
+    country = models.CharField(max_length=100, null=True, blank=True)
+    pincode = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -106,3 +113,16 @@ class Conversation(GeneralFieldsMixin):
 
     def __str__(self):
         return f"{self.sender_name} - {self.subject}"
+
+class Project(GeneralFieldsMixin):
+    title = models.CharField(max_length=255)
+    description = models.TextField(null=True, blank=True)
+    image = models.ImageField(upload_to='project_images/', null=True, blank=True)
+    start_date = models.DateField(null=True, blank=True)
+    end_date = models.DateField(null=True, blank=True)
+    client = models.CharField(max_length=255, null=True, blank=True)
+    budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    status = models.CharField(max_length=50, choices=[('ongoing', 'Ongoing'), ('completed', 'Completed'), ('on_hold', 'On Hold')], default='ongoing')
+
+    def __str__(self):
+        return self.title
