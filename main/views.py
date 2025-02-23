@@ -4,8 +4,10 @@ from .models import *
 
 def index(request):
     config_data = Configuration.objects.last()
+    carousel_data = Carousel.objects.filter(status=True)
     context = {
-        'config': config_data
+        'config': config_data,
+        'carousel': carousel_data
     }
     return render(request, 'main/index.html',context)
 
