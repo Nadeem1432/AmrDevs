@@ -9,13 +9,15 @@ def index(request):
     project_data = Project.objects.filter(status=True)
     blog_data = Blog.objects.filter(status=True)
     team_data = TeamMember.objects.filter(status=True)
+    client_review = ClientReview.objects.filter(status=True)
     context = {
         'config': config_data,
         'carousel': carousel_data,
         'service': service_data,
         'project': project_data,
         'blog': blog_data,
-        'team': team_data
+        'team': team_data,
+        'review': client_review
     }
     return render(request, 'main/index.html',context)
 
