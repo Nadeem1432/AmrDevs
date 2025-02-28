@@ -6,10 +6,12 @@ def index(request):
     config_data = Configuration.objects.last()
     carousel_data = Carousel.objects.filter(status=True)
     service_data = Service.objects.filter(status=True)
+    project_data = Project.objects.filter(status=True)
     context = {
         'config': config_data,
         'carousel': carousel_data,
-        'service': service_data
+        'service': service_data,
+        'project': project_data
     }
     return render(request, 'main/index.html',context)
 

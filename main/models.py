@@ -122,7 +122,7 @@ class Project(GeneralFieldsMixin):
     end_date = models.DateField(null=True, blank=True)
     client = models.CharField(max_length=255, null=True, blank=True)
     budget = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    status = models.CharField(max_length=50, choices=[('ongoing', 'Ongoing'), ('completed', 'Completed'), ('on_hold', 'On Hold')], default='ongoing')
+    work_status = models.CharField(max_length=50, choices=[('ongoing', 'Ongoing'), ('completed', 'Completed'), ('on_hold', 'On Hold')], default='ongoing')
 
     def __str__(self):
         return self.title
