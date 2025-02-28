@@ -86,6 +86,7 @@ class ClientReview(GeneralFieldsMixin):
     
 class Blog(GeneralFieldsMixin):
     title = models.CharField(max_length=255)
+    type = models.CharField(max_length=50,null=True, blank=True)
     content = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published_date = models.DateTimeField(default=timezone.now)
