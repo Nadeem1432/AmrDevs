@@ -4,9 +4,9 @@ __pycache__/
 *.pyo
 
 # Ignore Django migration files
-*/migrations/*.py
-*/migrations/*.pyc
-*/migrations/__init__.py
+# */migrations/*.py
+# */migrations/*.pyc
+# */migrations/__init__.py
 
 # Ignore environment variable files
 .env
