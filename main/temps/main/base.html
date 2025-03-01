@@ -29,6 +29,10 @@
 
         <!-- Template Stylesheet -->
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
+        <!-- sweet alert -->
+        <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>
+        <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+    
     </head>
 
     <body>
@@ -193,6 +197,14 @@
 
     <!-- Template Javascript -->
     <script src="{% static 'js/main.js' %}"></script>
+    <script>
+        {% if popup == "submitted" %}
+            swal("Query Successfully Sent", "{{ message }}", "success");
+        {% elif popup == "failed" %}
+            swal("Error", "Something went wrong", "error");
+        {% endif %}
+    </script>
+
     </body>
 
 </html>

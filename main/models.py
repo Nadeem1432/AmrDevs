@@ -2,6 +2,7 @@ from django.db import models
 from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils import timezone
+import os
 
 class GeneralFieldsMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -84,9 +85,29 @@ class ClientReview(GeneralFieldsMixin):
     def __str__(self):
         return f"{self.client_name} - {self.rating}/5"
     
+    def delete(self, *args, **kwargs):
+        if self.client_photo:
+            try:
+                if os.path.isfile(self.client_photo.path):
+                    os.remove(self.client_photo.path)
+                    print(f"Deleted file: {self.client_photo.path}")
+                else:
+                    print(f"File not found: {self.client_photo.path}")
+            except Exception as e:
+                print(f"Error deleting file: {e}")
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            existing_instance = ClientReview.objects.get(pk=self.pk)
+            if existing_instance.client_photo != self.client_photo:
+                if existing_instance.client_photo:
+                    if os.path.isfile(existing_instance.client_photo.path):
+                        os.remove(existing_instance.client_photo.path)
+        super().save(*args, **kwargs)
+
 class Blog(GeneralFieldsMixin):
     title = models.CharField(max_length=255)
-    type = models.CharField(max_length=50,null=True, blank=True)
     content = models.TextField()
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published_date = models.DateTimeField(default=timezone.now)
@@ -94,6 +115,27 @@ class Blog(GeneralFieldsMixin):
 
     def __str__(self):
         return self.title
+    
+    def delete(self, *args, **kwargs):
+        if self.cover_image:
+            try:
+                if os.path.isfile(self.cover_image.path):
+                    os.remove(self.cover_image.path)
+                    print(f"Deleted file: {self.cover_image.path}")
+                else:
+                    print(f"File not found: {self.cover_image.path}")
+            except Exception as e:
+                print(f"Error deleting file: {e}")
+        super().delete(*args, **kwargs)
+
+    def save(self, *args, **kwargs):
+        if self.pk is not None:
+            existing_instance = ClientReview.objects.get(pk=self.pk)
+            if existing_instance.cover_image != self.cover_image:
+                if existing_instance.cover_image:
+                    if os.path.isfile(existing_instance.cover_image.path):
+                        os.remove(existing_instance.cover_image.path)
+        super().save(*args, **kwargs)
     
 class Service(GeneralFieldsMixin):
     name = models.CharField(max_length=255)
