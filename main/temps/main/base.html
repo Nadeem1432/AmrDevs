@@ -209,7 +209,7 @@
     <script src="{% static 'js/main.js' %}"></script>
     <script>
         {% if popup == "submitted" %}
-            swal("Query Successfully Sent", "{{ message }}", "success");
+            swal("Query Sent Successfully.", "{{ message }}", "success");
         {% elif popup == "failed" %}
             swal("Error", "Something went wrong", "error");
         {% endif %}
