@@ -9,7 +9,7 @@
     "routes": [
       {
         "src": "/(.*)",
-        "dest": "amrdevs/wsgi.py"
+        "dest": "/amrdevs/wsgi.py"
       }
     ]
   }
