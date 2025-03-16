@@ -1,0 +1,15 @@
+{
+    "builds": [
+      {
+        "src": "amrdevs/wsgi.py",
+        "use": "@vercel/python",
+        "config": { "runtime": "python3.11" }
+      }
+    ],
+    "routes": [
+      {
+        "src": "/(.*)",
+        "dest": "amrdevs/wsgi.py"
+      }
+    ]
+  }
