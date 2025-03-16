@@ -24,18 +24,16 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-$i5=ph7qqsp2hcy28rl-lhv!lp_7xm&x$zxjp79w-xf4)&ixvi'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-# DEBUG = config('DEBUG')
-DEBUG = True
+DEBUG = config('DEBUG')
 
-# ALLOWED_HOSTS = ['*',
-#                  'https://www.amrdevs.in/',
-#                  'http://www.amrdevs.in/',
-#                  'www.amrdevs.in',
-#                  'amrdevs.in',
-#                  "45.79.40.87",
-#                  ".vercel.app"]
+ALLOWED_HOSTS = ['*',
+                 'https://www.amrdevs.in/',
+                 'http://www.amrdevs.in/',
+                 'www.amrdevs.in',
+                 'amrdevs.in',
+                 "45.79.40.87",
+                 ".vercel.app"]
 
-ALLOWED_HOSTS = [".vercel.app"]
 
 # Application definition
 
@@ -150,10 +148,8 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # config for smtp
 EMAIL_HOST = 'smtp.gmail.com'
-# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_HOST_USER = 'amrohvidevelopers@gmail.com'
-EMAIL_HOST_PASSWORD = 'qqhkylnakkpzrktd'
+EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend'
