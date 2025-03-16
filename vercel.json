@@ -3,7 +3,7 @@
       {
         "src": "amrdevs/wsgi.py",
         "use": "@vercel/python",
-        "config": { "runtime": "python3.11" }
+        "config": { "runtime": "python3.11", "maxLambdaSize": "50mb" }
       }
     ],
     "routes": [
