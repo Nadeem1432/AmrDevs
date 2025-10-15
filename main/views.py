@@ -19,7 +19,6 @@ def index(request):
         'team': team_data,
         'review': client_review
     }
-    print("test")
     return render(request, 'main/index.html',context)
 
 
