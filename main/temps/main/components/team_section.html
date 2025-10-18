@@ -1,7 +1,9 @@
 <div class="container-fluid team pb-5">
     <div class="container pb-5">
-        <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+        <div class="text-center mx-auto pt-3 pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+            {% if request.resolver_match.url_name != 'team' %}
             <h4 class="text-primary">Our Team</h4>
+            {% endif %}
             <h1 class="display-4">Our Investa Company Dedicated Team Member</h1>
         </div>
         {% if team %}
