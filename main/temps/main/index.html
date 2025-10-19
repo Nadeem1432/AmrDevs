@@ -30,49 +30,105 @@ Index | AmrDevs
 
             {% if forloop.counter|divisibleby:3 %}
             <div class="header-carousel-item">
-                <div class="header-carousel-item-img-3">
-                    <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image">
+            <div class="header-carousel-item-img-3">
+                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+                 style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
+            </div>
+            <div class="carousel-caption my-3">
+                <div class="carousel-caption-inner text-center text-md-end p-3 p-md-5"
+                 style="max-width:940px; margin-inline:auto;
+                    background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
+                    border-radius:10px;">
+                <h1 class="mb-3" style="color:#fff; line-height:1.05; font-size:clamp(1.6rem,5.8vw,3.8rem);">
+                    {{item.title}}
+                </h1>
+                <p class="mb-4" style="color:#f1f1f1; font-size:clamp(0.95rem,2.4vw,1.25rem);">
+                    {{item.description}}
+                </p>
+                <div class="d-flex justify-content-center justify-content-md-end gap-2 flex-wrap">
+                    <a class="btn btn-primary rounded-pill"
+                       href="tel:{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    </a>
+                    <a class="btn btn-dark rounded-pill hover-effect"
+                       href="https://wa.me/{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    </a>
                 </div>
-                <div class="carousel-caption">
-                    <div class="carousel-caption-inner text-end p-3">
-                        <h1 class="display-1 text-capitalize text-white mb-4">{{item.title}}</h1>
-                        <p class="mb-5 fs-5">{{item.description}}</p>
-                        <a class="btn btn-primary rounded-pill py-3 px-5 mb-4 me-4" href="tel:{{ config.phone }}"><i class="fas fa-phone-alt mr-2"></i> Let's Talk</a>
-                        <a class="btn btn-dark rounded-pill py-3 px-5 mb-4 hover-effect" href="https://wa.me/{{ config.phone }}"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
-                    </div>
                 </div>
+            </div>
             </div>
 
             {% elif forloop.counter|divisibleby:2 %}
             <div class="header-carousel-item mx-auto">
-                <div class="header-carousel-item-img-2">
-                    <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image">
+            <div class="header-carousel-item-img-2">
+                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+                 style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
+            </div>
+            <div class="carousel-caption">
+                <div class="carousel-caption-inner text-center p-3 p-md-5"
+                 style="max-width:900px; margin-inline:auto;
+                    background: linear-gradient(180deg, rgba(0,0,0,0.45), rgba(0,0,0,0.18));
+                    border-radius:10px;">
+                <h1 class="mb-3" style="color:#fff; line-height:1.05; font-size:clamp(1.6rem,5.8vw,3.8rem);">
+                    {{item.title}}
+                </h1>
+                <p class="mb-4" style="color:#f1f1f1; font-size:clamp(.95rem,2.4vw,1.25rem);">
+                    {{item.description}}
+                </p>
+                <div class="d-flex justify-content-center gap-2 flex-wrap">
+                    <a class="btn btn-primary rounded-pill"
+                       href="tel:{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    </a>
+                    <a class="btn btn-dark rounded-pill hover-effect"
+                       href="https://wa.me/{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    </a>
                 </div>
-                <div class="carousel-caption">
-                    <div class="carousel-caption-inner text-center p-3">
-                        <h1 class="display-1 text-capitalize text-white mb-4">{{item.title}}</h1>
-                        <p class="mb-5 fs-5">{{item.description}}</p>
-                        <a class="btn btn-primary rounded-pill py-3 px-5 mb-4 me-4" href="tel:{{ config.phone }}"><i class="fas fa-phone-alt mr-2"></i> Let's Talk</a>
-                        <a class="btn btn-dark rounded-pill py-3 px-5 mb-4 hover-effect" href="https://wa.me/{{ config.phone }}"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
-                    </div>
                 </div>
+            </div>
             </div>
 
             {% else %}
             <div class="header-carousel-item">
-                <div class="header-carousel-item-img-1">
-                    <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image">
+            <div class="header-carousel-item-img-1">
+                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+                 style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
+            </div>
+            <div class="carousel-caption">
+                <div class="carousel-caption-inner text-center text-md-start p-3 p-md-5"
+                 style="max-width:940px; margin-inline:auto;
+                    background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
+                    border-radius:10px;">
+                <h1 class="mb-3 fadeInUp animate__animated"
+                    data-animation="fadeInUp" data-delay="1.3s"
+                    style="color:#fff; line-height:1.05; font-size:clamp(1.6rem,5.8vw,3.8rem); animation-delay: 1.3s;">
+                    {{item.title}}
+                </h1>
+                <p class="mb-4 fadeInUp animate__animated"
+                   data-animation="fadeInUp" data-delay="1.5s"
+                   style="color:#f1f1f1; font-size:clamp(.95rem,2.4vw,1.25rem); animation-delay: 1.5s;">
+                    {{item.description}}
+                </p>
+                <div class="d-flex justify-content-center justify-content-md-start gap-2 flex-wrap">
+                    <a class="btn btn-primary rounded-pill"
+                       href="tel:{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    </a>
+                    <a class="btn btn-dark rounded-pill hover-effect"
+                       href="https://wa.me/{{ config.phone }}"
+                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    </a>
                 </div>
-                <div class="carousel-caption">
-                    <div class="carousel-caption-inner text-start p-3">
-                        <h1 class="display-1 text-capitalize text-white mb-4 fadeInUp animate__animated" data-animation="fadeInUp" data-delay="1.3s" style="animation-delay: 1.3s;">{{item.title}}</h1>
-                        <p class="mb-5 fs-5 fadeInUp animate__animated" data-animation="fadeInUp" data-delay="1.5s" style="animation-delay: 1.5s;">{{item.description}}
-                        </p>
-                        <a class="btn btn-primary rounded-pill py-3 px-5 mb-4 me-4" href="tel:{{ config.phone }}"><i class="fas fa-phone-alt mr-2"></i> Let's Talk</a>
-                        <a class="btn btn-dark rounded-pill py-3 px-5 mb-4 hover-effect" href="https://wa.me/{{ config.phone }}"><i class="fab fa-whatsapp mr-2"></i> WhatsApp</a>
-
-                    </div>
                 </div>
+            </div>
             </div>
             {% endif %}
 
