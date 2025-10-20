@@ -207,6 +207,13 @@
     }
 }
 
+@media (max-width: 767px) {
+  .owl-nav {
+    display: none !important;
+  }
+}
+
+
 @media (max-width: 991px) {
     .navbar .navbar-nav .nav-item.nav-link {
         margin: 15px 0 !important;
