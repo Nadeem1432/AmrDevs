@@ -1,0 +1,124 @@
+<!doctype html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>Send Job Application</title>
+  <style>
+    body{font-family: Arial, sans-serif;max-width:800px;margin:28px auto;color:#222;}
+    label{display:block;margin-top:12px;font-weight:600;}
+    input[type="text"], input[type="email"], textarea, select{width:100%;padding:8px;margin-top:6px;border:1px solid #ccc;border-radius:4px;}
+    textarea{min-height:160px;}
+    .row{display:flex;gap:12px;}
+    .col{flex:1;}
+    .actions{margin-top:16px;}
+    button{padding:10px 16px;background:#1976d2;color:#fff;border:none;border-radius:4px;cursor:pointer;}
+    small{color:#666;}
+    .hint{font-size:13px;color:#555;margin-top:6px;}
+  </style>
+</head>
+<body>
+  <h1>Send Job Application</h1>
+
+  <form method="post" enctype="multipart/form-data" id="job-application-form">
+    {% csrf_token %}
+
+    <label>Recipients (comma separated)
+      <input type="text" name="recipients" id="recipients" placeholder="hr@company.com, recruiter@company.com">
+      <small>Use commas to send to multiple addresses.</small>
+    </label>
+
+    <label>Choose an email subject template (optional)
+      <select name="subject_template" id="subject_template">
+        <option value="">-- choose template --</option>
+        {% for s in subjects %}
+          <option value="{{ s.id }}">{{ s.subject }}</option>
+        {% endfor %}
+      </select>
+      <small class="hint">Selecting a template will populate the Subject field below.</small>
+    </label>
+
+    <label>Subject
+      <input type="text" name="subject" id="subject" placeholder="Job Application: Backend Developer">
+    </label>
+
+    <label>Cover Letter / Message
+      <textarea name="cover_letter" id="cover_letter" placeholder="Write a short cover letter or message to the hiring team..." required></textarea>
+    </label>
+    <div class="row">
+      <div class="col">
+        <label>Select existing resume (optional)
+          <select name="resume_select" id="resume_select">
+            <option value="">-- choose existing resume (optional) --</option>
+            {% for r in resumes %}
+              <option value="{{ r.id }}">{{ r.name }}</option>
+            {% endfor %}
+          </select>
+        </label>
+      </div>
+      <div class="col">
+        <label>Or upload new resume (PDF / DOCX / TXT)
+          <input type="file" name="resume_file" id="resume_file" accept=".pdf,.doc,.docx,.txt">
+        </label>
+      </div>
+    </div>
+
+    <div class="actions">
+      <button type="submit">Send Application</button>
+    </div>
+  </form>
+
+  <script>
+    (function(){
+      // When a subject template is selected, copy its text into the subject input.
+      var templateSelect = document.getElementById('subject_template');
+      var subjectInput = document.getElementById('subject');
+
+    templateSelect.addEventListener('change', function(){
+      var selectedOption = templateSelect.options[templateSelect.selectedIndex];
+      var selectedText = selectedOption.text;
+      var selectedId = selectedOption.value;
+
+      if(selectedText && selectedText.trim() !== '-- choose template --'){
+        subjectInput.value = selectedText;
+
+        // Find the body for the selected template
+        var templates = {{ subjects|safe }};
+        var body = '';
+        for(var i=0; i<templates.length; i++){
+        if(templates[i].id == selectedId){
+          body = templates[i].body;
+          break;
+        }
+        }
+        document.getElementById('cover_letter').value = body;
+      }
+    });
+
+      // If user selects an existing resume, clear the file input (to avoid confusion)
+      var resumeSelect = document.getElementById('resume_select');
+      var resumeFile = document.getElementById('resume_file');
+
+      var form = document.getElementById('job-application-form');
+      form.addEventListener('submit', function(event){
+        if(!resumeSelect.value && !resumeFile.value){
+          event.preventDefault();
+          alert('Please select an existing resume or upload a new one.');
+          return false;
+        }
+      });   
+
+      resumeSelect.addEventListener('change', function(){
+        if(resumeSelect.value){
+          resumeFile.value = '';
+        }
+      });
+
+      resumeFile.addEventListener('change', function(){
+        if(resumeFile.value){
+          resumeSelect.value = '';
+        }
+      });
+    })();
+  </script>
+</body>
+</html>

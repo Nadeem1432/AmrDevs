@@ -1,0 +1,40 @@
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <style>
+      body{font-family: Arial, sans-serif;color:#222;line-height:1.5;}
+      .container{max-width:680px;margin:0 auto;padding:20px;border:1px solid #e6e6e6;border-radius:8px;}
+      .header{background:#1976d2;color:#fff;padding:12px;border-radius:6px 6px 0 0;}
+      .content{padding:16px;}
+      .footer{font-size:12px;color:#666;padding:10px 16px;border-top:1px solid #eee;margin-top:18px;}
+      .meta{margin-top:8px;}
+      .meta b{display:inline-block;width:110px;}
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h2 style="margin:0;font-size:18px;">Job Application</h2>
+      </div>
+      <div class="content">
+        <p>Dear Hiring Team,</p>
+
+        <p>{{ cover_letter|linebreaksbr }}</p>
+
+        <p>Kind regards,<br><strong>{{ applicant_name }}</strong></p>
+
+        <div class="meta">
+          <p><b>Contact:</b> {{ applicant_email }}</p>
+          {% if resume and resume.file %}
+            <p><b>Resume:</b> {{ resume.file.name|slice:"-60:" }} (attached)</p>
+          {% endif %}
+        </div>
+      </div>
+
+      <div class="footer">
+        This message was sent automatically. Please reply to {{ applicant_email }} for further conversation.
+      </div>
+    </div>
+  </body>
+</html>

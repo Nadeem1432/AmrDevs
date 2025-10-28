@@ -46,12 +46,14 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-INDIVIDUAL_APPS = [ 'main',
-                    'panel'
+CUSTOM_APPS = [ 'main',
+                    'panel',
+                    'jobportal',
+                    'common'
                  ] 
 THIRD_PARTY_APPS = ['django_extensions']
 
-INSTALLED_APPS = DEFAULT_APPS + INDIVIDUAL_APPS + THIRD_PARTY_APPS
+INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -69,7 +71,7 @@ ROOT_URLCONF = 'amrdevs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["main/temps", "panel/temps"],
+        'DIRS': ["main/temps", "panel/temps", "jobportal/temps"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -163,11 +165,11 @@ EMAIL_PROVIDERS = {
         "PASSWORD": config('EMAIL_HOST_PASSWORD'),
         "USE_TLS": True,
     },
-    "jobapply": {
+    "jobportal": {
         "HOST": "smtp.gmail.com",
         "PORT": 587,
-        "USER": "support@gmail.com",
-        "PASSWORD": "app_password_2",
+        "USER": config('JOBAPPLY_USER'),
+        "PASSWORD": config('JOBAPPLY_PASSWORD'),
         "USE_TLS": True,
     },
 }
