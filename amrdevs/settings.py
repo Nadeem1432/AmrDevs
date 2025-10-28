@@ -148,9 +148,27 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # config for smtp
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = config('EMAIL_HOST_USER')
-EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend'
+# EMAIL_HOST = 'smtp.gmail.com'
+# EMAIL_HOST_USER = config('EMAIL_HOST_USER')
+# EMAIL_HOST_PASSWORD = config('EMAIL_HOST_PASSWORD')
+# EMAIL_PORT = 587
+# EMAIL_USE_TLS = True
+# EMAIL_BACKENDS = 'django.core.mail.backends.smtp.EmailBackend'
+
+EMAIL_PROVIDERS = {
+    "amrdevs": {
+        "HOST": "smtp.gmail.com",
+        "PORT": 587,
+        "USER": config('EMAIL_HOST_USER'),
+        "PASSWORD": config('EMAIL_HOST_PASSWORD'),
+        "USE_TLS": True,
+    },
+    "jobapply": {
+        "HOST": "smtp.gmail.com",
+        "PORT": 587,
+        "USER": "support@gmail.com",
+        "PASSWORD": "app_password_2",
+        "USE_TLS": True,
+    },
+}
+
