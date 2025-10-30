@@ -176,23 +176,6 @@ EMAIL_PROVIDERS = {
     },
 }
 
-CKEDITOR_CONFIGS = {
-    'default': {
-        'toolbar': 'Custom',
-        'toolbar_Custom': [
-            ['Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat'],
-            ['NumberedList', 'BulletedList', '-', 'Blockquote'],
-            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
-            ['Link', 'Unlink'],
-            ['Undo', 'Redo'],
-            ['Format', 'FontSize', 'TextColor', 'BGColor'],
-        ],
-        'height': 300,
-        'width': '100%',
-        'removePlugins': 'image,uploadimage,uploadfile',
-    },
-}
-
 
 TINYMCE_DEFAULT_CONFIG = {
     "height": 400,

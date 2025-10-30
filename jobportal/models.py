@@ -3,7 +3,6 @@ from uuid import uuid4
 from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.dispatch import receiver
-from ckeditor.fields import RichTextField
 from tinymce.models import HTMLField
 
 
