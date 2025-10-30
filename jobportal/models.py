@@ -3,10 +3,12 @@ from uuid import uuid4
 from django.db import models
 from django.db.models.signals import pre_save, post_delete
 from django.dispatch import receiver
+from ckeditor.fields import RichTextField
+from tinymce.models import HTMLField
 
 
 class Resume(models.Model):
-    @staticmethod
+    # @staticmethod
     def filepath(instance, filename):
         # Use instance.pk when available (for existing objects); otherwise generate a temporary unique prefix
         # to avoid saving filenames containing 'None'.
@@ -59,7 +61,7 @@ def delete_old_file_on_change(sender, instance, **kwargs):
 
 class EmailTemplate(models.Model):
     subject = models.CharField(max_length=200)
-    body = models.TextField()
+    body = HTMLField()
     status = models.BooleanField(default=True)
 
     def __str__(self):

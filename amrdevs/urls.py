@@ -24,4 +24,6 @@ urlpatterns = [
     path('', include('main.urls')),
     path('panel/', include('panel.urls')),
     path('job-portal/', include('jobportal.urls')),
+    path('tinymce/', include('tinymce.urls')),
+
 ]  + static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT) + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)

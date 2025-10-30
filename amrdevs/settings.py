@@ -46,12 +46,14 @@ DEFAULT_APPS = [
     'django.contrib.staticfiles',
 ]
 
-CUSTOM_APPS = [ 'main',
+CUSTOM_APPS = [     'main',
                     'panel',
                     'jobportal',
                     'common'
                  ] 
-THIRD_PARTY_APPS = ['django_extensions']
+THIRD_PARTY_APPS = [    'django_extensions',
+                        'tinymce',
+                        ]
 
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -174,3 +176,35 @@ EMAIL_PROVIDERS = {
     },
 }
 
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'Custom',
+        'toolbar_Custom': [
+            ['Bold', 'Italic', 'Underline', 'Strike', 'RemoveFormat'],
+            ['NumberedList', 'BulletedList', '-', 'Blockquote'],
+            ['JustifyLeft', 'JustifyCenter', 'JustifyRight'],
+            ['Link', 'Unlink'],
+            ['Undo', 'Redo'],
+            ['Format', 'FontSize', 'TextColor', 'BGColor'],
+        ],
+        'height': 300,
+        'width': '100%',
+        'removePlugins': 'image,uploadimage,uploadfile',
+    },
+}
+
+
+TINYMCE_DEFAULT_CONFIG = {
+    "height": 400,
+    "width": "100%",
+    "cleanup_on_startup": True,
+    "custom_undo_redo_levels": 10,
+    "selector": "textarea",
+    "theme": "silver",
+    "plugins": "link image preview codesample table code lists",
+    "toolbar1": "undo redo | bold italic underline | alignleft aligncenter alignright alignjustify | "
+                "bullist numlist outdent indent | link image table | code preview",
+    "contextmenu": "formats | link image",
+    "menubar": True,
+    "statusbar": True,
+}
