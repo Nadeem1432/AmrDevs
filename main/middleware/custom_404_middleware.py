@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from django.urls import resolve, Resolver404
 from django.conf import settings
-from django.db import DatabaseError, ProgrammingError
+from django.db import DatabaseError, ProgrammingError, OperationalError
 from django.template import TemplateDoesNotExist
 from django.core.exceptions import SuspiciousFileOperation
 import traceback
@@ -56,7 +56,7 @@ class CustomErrorMiddleware:
             return render(request, "main/404.html", status=404)
 
         # Database-related errors
-        except (ProgrammingError, DatabaseError) as e:
+        except (ProgrammingError, DatabaseError, OperationalError) as e:
             return render(
                 request,
                 "main/500.html",
