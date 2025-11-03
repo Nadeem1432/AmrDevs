@@ -92,28 +92,28 @@ WSGI_APPLICATION = 'amrdevs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
-import shutil, os
-from pathlib import Path
-
-BASE_DIR = Path(__file__).resolve().parent.parent
-DB_PATH = BASE_DIR / "db.sqlite3"
-TMP_DB_PATH = "/tmp/db.sqlite3"
-
-if os.path.exists(DB_PATH):
-    shutil.copy(DB_PATH, TMP_DB_PATH)
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': TMP_DB_PATH,
+        'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
+# import shutil, os
+# from pathlib import Path
+
+# BASE_DIR = Path(__file__).resolve().parent.parent
+# DB_PATH = BASE_DIR / "db.sqlite3"
+# TMP_DB_PATH = "/tmp/db.sqlite3"
+
+# if os.path.exists(DB_PATH):
+#     shutil.copy(DB_PATH, TMP_DB_PATH)
+
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': TMP_DB_PATH,
+#     }
+# }
 
 
 
@@ -121,9 +121,9 @@ DATABASES = {
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
 AUTH_PASSWORD_VALIDATORS = [
-    {
-        'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
-    },
+    # {
+    #     'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
+    # },
     {
         'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator',
     },
