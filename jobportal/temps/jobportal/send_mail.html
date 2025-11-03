@@ -1,174 +1,266 @@
 <!doctype html>
-<html>
+<html lang="en">
 <head>
   <meta charset="utf-8">
   <title>Send Job Application</title>
+
+  <!-- Basic styling -->
   <style>
     body {
-      font-family: Arial, sans-serif;
-      max-width: 800px;
-      margin: 28px auto;
+      font-family: "Inter", Arial, sans-serif;
+      background: #f5f7fa;
       color: #222;
+      margin: 0;
+      padding: 40px 20px;
     }
-    label {
-      display: block;
-      margin-top: 12px;
+
+    .form-container {
+      max-width: 850px;
+      background: #fff;
+      margin: 0 auto;
+      padding: 30px 40px;
+      border-radius: 16px;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: box-shadow 0.3s ease;
+    }
+
+    .form-container:hover {
+      box-shadow: 0 6px 25px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+      font-size: 28px;
+      margin-bottom: 25px;
+      color: #1976d2;
+      text-align: center;
       font-weight: 600;
     }
+
+    label {
+      display: block;
+      margin-top: 18px;
+      font-weight: 600;
+      color: #333;
+    }
+
     input[type="text"],
     input[type="email"],
-    textarea,
-    select {
+    select,
+    textarea {
       width: 100%;
-      padding: 8px;
+      padding: 12px 14px;
       margin-top: 6px;
       border: 1px solid #ccc;
-      border-radius: 4px;
+      border-radius: 8px;
+      font-size: 15px;
+      transition: all 0.2s ease;
     }
+
+    input:focus,
+    select:focus,
+    textarea:focus {
+      border-color: #1976d2;
+      box-shadow: 0 0 0 3px rgba(25, 118, 210, 0.15);
+      outline: none;
+    }
+
     textarea {
-      min-height: 160px;
+      min-height: 180px;
     }
+
     .row {
       display: flex;
-      gap: 12px;
+      flex-wrap: wrap;
+      gap: 18px;
+      margin-top: 12px;
     }
+
     .col {
       flex: 1;
+      min-width: 260px;
     }
+
+    small,
+    .hint {
+      display: block;
+      font-size: 13px;
+      color: #666;
+      margin-top: 4px;
+    }
+
     .actions {
-      margin-top: 16px;
+      margin-top: 28px;
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
     }
+
     button {
-      padding: 10px 16px;
+      padding: 12px 20px;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      font-size: 15px;
+      transition: all 0.3s ease;
+    }
+
+    button[type="submit"] {
       background: #1976d2;
       color: #fff;
-      border: none;
-      border-radius: 4px;
-      cursor: pointer;
     }
-    small {
-      color: #666;
+
+    button[type="submit"]:hover {
+      background: #0d61b1;
+      box-shadow: 0 3px 8px rgba(25, 118, 210, 0.3);
     }
-    .hint {
-      font-size: 13px;
-      color: #555;
-      margin-top: 6px;
+
+    button[type="reset"] {
+      background: #f3f4f6;
+      color: #333;
+    }
+
+    button[type="reset"]:hover {
+      background: #e0e0e0;
+    }
+
+    /* Error border */
+    .invalid {
+      border-color: #e53935 !important;
+      box-shadow: 0 0 0 3px rgba(229, 57, 53, 0.15);
+    }
+
+    @media (max-width: 600px) {
+      .form-container {
+        padding: 20px;
+      }
+      h1 {
+        font-size: 22px;
+      }
     }
   </style>
 
-
+  <!-- TinyMCE -->
   <script src="https://cdn.tiny.cloud/1/<YOUR_API_KEY>/tinymce/7/tinymce.min.js" referrerpolicy="origin"></script>
+
   <script>
     document.addEventListener("DOMContentLoaded", function() {
       tinymce.init({
         selector: '#cover_letter',
         height: 400,
-        menubar: true,
-        plugins: 'link image code lists table preview',
-        toolbar: 'undo redo | formatselect | bold italic underline | ' +
-                 'alignleft aligncenter alignright | bullist numlist | link image | code preview',
-        content_style: 'body { font-family:Arial,sans-serif; font-size:14px }'
+        menubar: false,
+        plugins: 'link lists table code preview',
+        toolbar: 'undo redo | styles | bold italic underline | ' +
+                 'alignleft aligncenter alignright | bullist numlist | link | code preview',
+        content_style: 'body { font-family:Inter,Arial,sans-serif; font-size:14px; color:#333 }',
       });
     });
   </script>
 </head>
 
 <body>
-  <h1 style="font-size: 32px; margin-bottom: 30px;">Send Job Application</h1>
+  <div class="form-container">
+    <h1>Send Job Application</h1>
 
-  <form method="post" enctype="multipart/form-data" id="job-application-form" style="width: 100%; max-width: 900px; margin: 0 auto;">
-    {% csrf_token %}
+    <form method="post" enctype="multipart/form-data" id="job-application-form">
+      {% csrf_token %}
 
-    <label style="margin-bottom: 20px;">Recipients (comma separated)
-      <input type="text" 
-             name="recipients" 
-             id="recipients" 
-             placeholder="hr@company.com, recruiter@company.com"
-             style="padding: 12px; margin: 10px 0; font-size: 16px;">
-      <small style="display: block; margin-top: 8px;">Use commas to send to multiple addresses.</small>
-    </label>
+      <label>Recipients (comma separated)
+        <input type="text" name="recipients" id="recipients" placeholder="hr@company.com, recruiter@company.com">
+        <small>Use commas to send to multiple addresses.</small>
+      </label>
 
-    <label style="margin-bottom: 20px;">Choose an email subject template (optional)
-      <select name="subject_template" 
-              id="subject_template"
-              style="padding: 12px; margin: 10px 0; font-size: 16px; height: 45px;">
-        <option value="">-- choose template --</option>
-        {% for s in subjects %}
-          <option value="{{ s.id }}">{{ s.subject }}</option>
-        {% endfor %}
-      </select>
-      <small class="hint">Selecting a template will populate the Subject field below.</small>
-    </label>
+      <label>Choose an email subject template (optional)
+        <select name="subject_template" id="subject_template">
+          <option value="">-- choose template --</option>
+          {% for s in subjects %}
+            <option value="{{ s.id }}">{{ s.subject }}</option>
+          {% endfor %}
+        </select>
+        <small class="hint">Selecting a template will populate the Subject and Message fields.</small>
+      </label>
 
-    <label>Subject
-      <input type="text" name="subject" id="subject" placeholder="Job Application: Backend Developer">
-    </label>
+      <label>Subject
+        <input type="text" name="subject" id="subject" placeholder="Job Application: Backend Developer">
+      </label>
 
-    <label>Cover Letter / Message</label>
-    <textarea name="cover_letter" id="cover_letter" placeholder="Write a short cover letter or message..." required></textarea>
+      <label>Cover Letter / Message</label>
+      <textarea name="cover_letter" id="cover_letter" placeholder="Write a short cover letter or message..."></textarea>
 
-    <div class="row">
-      <div class="col">
-        <label>Select existing resume (optional)
-          <select name="resume_select" id="resume_select">
-            <option value="">-- choose existing resume (optional) --</option>
-            {% for r in resumes %}
-              <option value="{{ r.id }}">{{ r.name }}</option>
-            {% endfor %}
-          </select>
-        </label>
+      <div class="row">
+        <div class="col">
+          <label>Select existing resume (optional)
+            <select name="resume_select" id="resume_select">
+              <option value="">-- choose existing resume (optional) --</option>
+              {% for r in resumes %}
+                <option value="{{ r.id }}">{{ r.name }}</option>
+              {% endfor %}
+            </select>
+          </label>
+        </div>
+
+        <div class="col">
+          <label>Or upload new resume (PDF / DOCX / TXT)
+            <input type="file" name="resume_file" id="resume_file" accept=".pdf,.doc,.docx,.txt">
+          </label>
+        </div>
       </div>
-      <div class="col">
-        <label>Or upload new resume (PDF / DOCX / TXT)
-          <input type="file" name="resume_file" id="resume_file" accept=".pdf,.doc,.docx,.txt">
-        </label>
-      </div>
-    </div>
 
-    <div class="actions">
-      <button type="submit">Send Application</button>
-      <button type="reset" style="background:#000;margin-left:8px;">Reset</button>
-    </div>
-  </form>
+      <div class="actions">
+        <button type="submit">Send Application</button>
+        <button type="reset">Reset</button>
+      </div>
+    </form>
+  </div>
 
   <script>
     (function() {
-      var templateSelect = document.getElementById('subject_template');
-      var subjectInput = document.getElementById('subject');
+      const templateSelect = document.getElementById('subject_template');
+      const subjectInput = document.getElementById('subject');
 
       templateSelect.addEventListener('change', function() {
-        var selectedOption = templateSelect.options[templateSelect.selectedIndex];
-        var selectedText = selectedOption.text;
-        var selectedId = selectedOption.value;
+        const selectedId = this.value;
+        if (!selectedId) return;
 
-        if (selectedText && selectedText.trim() !== '-- choose template --') {
-          subjectInput.value = selectedText;
+        const templates = {{ subjects|safe }};
+        const selectedTemplate = templates.find(t => t.id == selectedId);
 
-          // Find the body for the selected template
-          var templates = {{ subjects|safe }};
-          var body = '';
-          for (var i = 0; i < templates.length; i++) {
-            if (templates[i].id == selectedId) {
-              body = templates[i].body;
-              break;
-            }
-          }
-
-          // ✅ Set TinyMCE editor content dynamically
+        if (selectedTemplate) {
+          subjectInput.value = selectedTemplate.subject || '';
           if (tinymce.get('cover_letter')) {
-            tinymce.get('cover_letter').setContent(body);
-          } else {
-            document.getElementById('cover_letter').value = body;
+            tinymce.get('cover_letter').setContent(selectedTemplate.body || '');
           }
         }
       });
 
-      // Validation: ensure resume selection or upload
-      var resumeSelect = document.getElementById('resume_select');
-      var resumeFile = document.getElementById('resume_file');
-      var form = document.getElementById('job-application-form');
+      const resumeSelect = document.getElementById('resume_select');
+      const resumeFile = document.getElementById('resume_file');
+      const form = document.getElementById('job-application-form');
 
       form.addEventListener('submit', function(event) {
+        if (window.tinymce && tinymce.get('cover_letter')) tinymce.triggerSave();
+
+        const coverVal = document.getElementById('cover_letter').value.trim();
+        const recipients = document.getElementById('recipients');
+
+        // reset visual errors
+        [recipients, subjectInput].forEach(el => el.classList.remove('invalid'));
+
+        if (!coverVal) {
+          event.preventDefault();
+          tinymce.get('cover_letter').focus();
+          alert('Please enter a cover letter or message.');
+          return false;
+        }
+
+        if (!recipients.value.trim()) {
+          event.preventDefault();
+          recipients.classList.add('invalid');
+          recipients.focus();
+          alert('Please enter at least one recipient email.');
+          return false;
+        }
+
         if (!resumeSelect.value && !resumeFile.value) {
           event.preventDefault();
           alert('Please select an existing resume or upload a new one.');
@@ -176,17 +268,8 @@
         }
       });
 
-      resumeSelect.addEventListener('change', function() {
-        if (resumeSelect.value) {
-          resumeFile.value = '';
-        }
-      });
-
-      resumeFile.addEventListener('change', function() {
-        if (resumeFile.value) {
-          resumeSelect.value = '';
-        }
-      });
+      resumeSelect.addEventListener('change', () => { if (resumeSelect.value) resumeFile.value = ''; });
+      resumeFile.addEventListener('change', () => { if (resumeFile.value) resumeSelect.value = ''; });
     })();
   </script>
 </body>

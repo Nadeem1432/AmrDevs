@@ -1,6 +1,7 @@
 from django.shortcuts import render, HttpResponse
 from django.core.mail import send_mail, EmailMessage, EmailMultiAlternatives, get_connection
 from django.template.loader import render_to_string
+from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
 from .models import *
@@ -63,15 +64,24 @@ def send_mail(request):
         if not recipients:
             return HttpResponse("Please provide at least one recipient email address.", status=400)
         
+        success_recipients = []
+        failed_recipients = []
+        parts = []
+        # Send HTML email using TinyMCE content as HTML body and a plain-text fallback
         for recipient in recipients:
-            
-            email = EmailMessage(
+            # Create plain-text fallback by stripping HTML tags from TinyMCE content
+            text_content = strip_tags(cover_letter) if cover_letter else ''
+            html_content = cover_letter or ''
+
+            email = EmailMultiAlternatives(
                 subject,
-                cover_letter,
+                text_content,
                 from_email,
                 [recipient],
                 connection=connection,
             )
+            # Attach the HTML version (TinyMCE-saved HTML)
+            email.attach_alternative(html_content, "text/html")
 
             # Attach the resume: prefer uploaded file (not saved), otherwise attach saved Resume.file
             if uploaded_resume_file:
@@ -98,10 +108,25 @@ def send_mail(request):
 
             elif resume and getattr(resume, 'file', None):
                 email.attach_file(resume.file.path)
-            
             res = email.send(fail_silently=False)
+            if res:
+                success_recipients.append(recipient)
+            else:
+                failed_recipients.append(recipient)
+
             url = reverse('send_mail')
-        return HttpResponse(f"Job Application Sent Successfully with response {res} <br><a href='{url}'>Go to Home Page</a>")
+            if success_recipients:
+                parts.append(f"Emails sent successfully to {', '.join(success_recipients)}.")
+            if failed_recipients:
+                parts.append(f"Failed to send to {', '.join(failed_recipients)}.")
+            parts.append(f'<a href="{url}">Send another</a>')
+        message = ' '.join(parts)
+
+        return render(request, 'jobportal/success.html', {
+            'message': message,
+            'success_recipients': success_recipients,
+            'failed_recipients': failed_recipients,
+        })
 
     context = {}
     context['resumes'] = list(Resume.objects.filter(status=True).values('name','id'))
