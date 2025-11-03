@@ -115,17 +115,19 @@ def send_mail(request):
                 failed_recipients.append(recipient)
 
             url = reverse('send_mail')
-            if success_recipients:
-                parts.append(f"Emails sent successfully to {', '.join(success_recipients)}.")
-            if failed_recipients:
-                parts.append(f"Failed to send to {', '.join(failed_recipients)}.")
-            parts.append(f'<a href="{url}">Send another</a>')
+
+        if success_recipients:
+            parts.append(f"Emails sent successfully to {', '.join(success_recipients)}.")
+        if failed_recipients:
+            parts.append(f"Failed to send to {', '.join(failed_recipients)}.")
+        send_another_mail = f'<a href="{url}">Send another</a>'
         message = ' '.join(parts)
 
         return render(request, 'jobportal/success.html', {
             'message': message,
             'success_recipients': success_recipients,
             'failed_recipients': failed_recipients,
+            'send_another_mail': send_another_mail,
         })
 
     context = {}

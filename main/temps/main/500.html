@@ -1,0 +1,11 @@
+<!doctype html>
+<html>
+<head><title>Server Error</title></head>
+<body style="font-family:sans-serif; text-align:center; padding:40px;">
+  <h1>💥 {{ error_title }}</h1>
+  <p>{{ error_message }}</p>
+  {% if traceback %}
+    <pre style="text-align:left; background:#f4f4f4; padding:10px; border-radius:6px;">{{ traceback }}</pre>
+  {% endif %}
+</body>
+</html>
