@@ -25,6 +25,7 @@ SECRET_KEY = 'django-insecure-$i5=ph7qqsp2hcy28rl-lhv!lp_7xm&x$zxjp79w-xf4)&ixvi
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
+PRODUCTION = config('PRODUCTION', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*',
                  'https://www.amrdevs.in/',
@@ -92,12 +93,32 @@ WSGI_APPLICATION = 'amrdevs.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-DATABASES = {
+if PRODUCTION:
+    DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': config('DB_NAME'),
+        'USER': config('DB_USER'),
+        'PASSWORD': config('DB_PASS'),
+        'HOST': config('DB_HOST'),
+        'PORT': config('DB_PORT'),
+        'OPTIONS': {
+            'sslmode': 'require',
+                    },
+                }
+            }
+
+    print("✅ Production database settings applied.")
+
+else:  
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': BASE_DIR / 'db.sqlite3',
+            }
     }
-}
+    print("✅ Development database settings applied.")
+
 # import shutil, os
 # from pathlib import Path
 
