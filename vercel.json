@@ -1,15 +1,20 @@
 {
-    "builds": [
-      {
-        "src": "amrdevs/wsgi.py",
-        "use": "@vercel/python",
-        "config": { "runtime": "python3.11", "maxLambdaSize": "50mb" }
-      }
-    ],
-    "routes": [
-      {
-        "src": "/(.*)",
-        "dest": "/amrdevs/wsgi.py"
-      }
-    ]
-  }
+  "builds": [
+    {
+      "src": "amrdevs/wsgi.py",
+      "use": "@vercel/python",
+      "config": { "runtime": "python3.11", "maxLambdaSize": "50mb" }
+    },
+    {
+      "src": "build.sh",
+      "use": "@vercel/static-build",
+      "config": { "distDir": ".vercel/output" }
+    }
+  ],
+  "routes": [
+    {
+      "src": "/(.*)",
+      "dest": "/amrdevs/wsgi.py"
+    }
+  ]
+}
