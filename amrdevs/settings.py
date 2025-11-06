@@ -107,6 +107,7 @@ if PRODUCTION:
                     },
                 }
             }
+    DATABASES['default']['CONN_MAX_AGE'] = 60
 
     print("✅ Production database settings applied.")
 
