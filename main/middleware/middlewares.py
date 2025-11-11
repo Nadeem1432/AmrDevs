@@ -82,3 +82,20 @@ class CustomErrorMiddleware:
                 "traceback": tb if settings.DEBUG else "",
             }
             return render(request, "main/500.html", context, status=500)
+
+
+class MaintenanceModeMiddleware:
+    """
+    If MAINTENANCE_MODE = True, show a simple maintenance message
+    (except to superusers or staff).
+    """
+    def __init__(self, get_response):
+        self.get_response = get_response
+        
+
+    def __call__(self, request):
+        if getattr(settings, "MAINTENANCE_MODE", False):
+            if not request.user.is_authenticated or not request.user.is_staff:
+                # You can use a template or static HTML here
+                return render(request, "common/maintenance.html", status=503)
+        return self.get_response(request)

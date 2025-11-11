@@ -5,12 +5,13 @@ from django.utils.html import strip_tags
 from django.conf import settings
 from django.urls import reverse
 from .models import *
+from django.contrib.auth.decorators import login_required
 
 # Create your views here.
 def home(request):
     return HttpResponse("<h1>Hello, world. You're at the home page.</h1><br><a href='{% url 'send_mail' %}'>Send mail</a>")
 
-
+@login_required(login_url='/')
 def send_mail(request):    
     if request.method == 'POST':
 

@@ -26,6 +26,7 @@ SECRET_KEY = 'django-insecure-$i5=ph7qqsp2hcy28rl-lhv!lp_7xm&x$zxjp79w-xf4)&ixvi
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 PRODUCTION = config('PRODUCTION', default=False, cast=bool)
+MAINTENANCE_MODE = config('MAINTENANCE_MODE', default=False, cast=bool)
 
 ALLOWED_HOSTS = ['*',
                  'https://www.amrdevs.in/',
@@ -62,11 +63,12 @@ MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'main.middleware.custom_404_middleware.CustomErrorMiddleware', # custom error middleware
+    'main.middleware.middlewares.CustomErrorMiddleware', # custom error middleware
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'main.middleware.middlewares.MaintenanceModeMiddleware', # custom maintenance middleware
 ]
 
 ROOT_URLCONF = 'amrdevs.urls'
@@ -74,7 +76,7 @@ ROOT_URLCONF = 'amrdevs.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': ["main/temps", "panel/temps", "jobportal/temps"],
+        'DIRS': ["main/temps", "panel/temps", "jobportal/temps", 'common/temps'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -120,22 +122,6 @@ else:
     }
     print("✅ Development database settings applied.")
 
-# import shutil, os
-# from pathlib import Path
-
-# BASE_DIR = Path(__file__).resolve().parent.parent
-# DB_PATH = BASE_DIR / "db.sqlite3"
-# TMP_DB_PATH = "/tmp/db.sqlite3"
-
-# if os.path.exists(DB_PATH):
-#     shutil.copy(DB_PATH, TMP_DB_PATH)
-
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': TMP_DB_PATH,
-#     }
-# }
 
 
 
