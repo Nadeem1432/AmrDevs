@@ -78,47 +78,72 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
     def __str__(self):
         return self.title
 
+    @staticmethod
+    def upload_files_to_supabase(instance, fields_to_upload):
+        """
+        Upload files to Supabase and update the corresponding URL fields.
+        """
+        mngr = SupabaseCustomStorage()
+        for field, folder, url_field in fields_to_upload:
+            file = getattr(instance, field)
+            if file:
+                public_url = mngr.upload_file_to_supabase(file=file, folder_path=folder, is_local_path=False)
+                if not public_url:
+                    raise Exception(f"{field} upload failed.")
+                setattr(instance, url_field, public_url)
+                setattr(instance, field, None)  # Clear the field to avoid saving the file locally
+
+    @staticmethod
+    def delete_unused_files_from_supabase(instance, model, fields_to_upload):
+        mngr = SupabaseCustomStorage()
+        if instance.pk is not None:
+            existing_instance = model.objects.get(pk=instance.pk)
+            for _, _, url_field in fields_to_upload:
+                existing_url = getattr(existing_instance, url_field)
+                new_url = getattr(instance, url_field)
+                if existing_url and existing_url != new_url:
+                    mngr.delete_file_from_supabase(existing_url)
+
+    @staticmethod
+    def delete_files_from_supabase(instance, fields_to_delete):
+        """
+        Delete files from Supabase based on the provided URL fields.
+        """
+        mngr = SupabaseCustomStorage()
+        for url_field in fields_to_delete:
+            url = getattr(instance, url_field)
+            if url:
+                try:
+                    mngr.delete_file_from_supabase(url)
+                except Exception as e:
+                    print(f"Error deleting file from Supabase: {e}")
+
     def save(self, *args, **kwargs):
-        # TODO: also do for logo and bg_image
-        supabase_mngr = SupabaseCustomStorage()
+        fields_to_upload = [
+            ('favicon', 'favicons', 'favicon_url'),
+            ('logo', 'logos', 'logo_url'),
+            ('bg_image', 'bg_images', 'bg_image_url'),
+        ]
 
-        if self.favicon:
-            folder_path = 'favicons'
-            file = self.favicon
-            public_url = supabase_mngr.upload_file_to_supabase(
-                file=file,
-                folder_path=folder_path,
-                is_local_path=False
-            )
-            if not public_url:
-                raise Exception("Favicon upload failed.")
-            self.favicon_url = public_url
-            self.favicon = None  # Clear the favicon field to avoid saving the file locally
-
+        # Upload new files to Supabase
+        self.upload_files_to_supabase(self, fields_to_upload)
         
-        # Check if updating an existing instance
-        if self.pk is not None:
-            existing_instance = Configuration.objects.get(pk=self.pk)
-            if existing_instance.favicon_url and existing_instance.favicon_url != self.favicon_url:
-                # Delete the existing file from Supabase
-                supabase_mngr.delete_file_from_supabase(existing_instance.favicon_url)
+        # Delete unused files from Supabase
+        self.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
 
         super().save(*args, **kwargs)
-    
+
     def delete(self, using=None, keep_parents=False):
-        supabase_mngr = SupabaseCustomStorage()
-        if self.favicon_url:
-            try:
-                # Delete the file from Supabase
-                supabase_mngr.delete_file_from_supabase(self.favicon_url)
-            except Exception as e:
-                print(f"Error deleting file from Supabase: {e}")
+        fields_to_delete = ['favicon_url', 'logo_url', 'bg_image_url']
+        # Delete files from Supabase
+        self.delete_files_from_supabase(self, fields_to_delete)
 
         super().delete(using, keep_parents)
 
 class ClientReview(GeneralFieldsMixin):
     client_name = models.CharField(max_length=255)
     client_photo = models.ImageField(upload_to='client_photos/', null=True, blank=True)
+    client_photo_url = models.URLField(max_length=255, null=True, blank=True)
     client_profession = models.CharField(max_length=255, null=True, blank=True)
     review = models.TextField()
     rating = models.PositiveIntegerField(default=5)
@@ -154,6 +179,7 @@ class Blog(GeneralFieldsMixin):
     author = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     published_date = models.DateTimeField(default=timezone.now)
     cover_image = models.ImageField(upload_to='blog_covers/', null=True, blank=True)
+    cover_image_url = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return self.title
@@ -183,6 +209,7 @@ class Service(GeneralFieldsMixin):
     name = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='service_images/', null=True, blank=True)
+    image_url = models.URLField(max_length=255, null=True, blank=True)
     link = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):
@@ -203,6 +230,7 @@ class Project(GeneralFieldsMixin):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='project_images/', null=True, blank=True)
+    image_url = models.URLField(max_length=255, null=True, blank=True)
     start_date = models.DateField(null=True, blank=True)
     end_date = models.DateField(null=True, blank=True)
     client = models.CharField(max_length=255, null=True, blank=True)
@@ -216,6 +244,7 @@ class Carousel(GeneralFieldsMixin):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
     image = models.ImageField(upload_to='carousel_images/')
+    image_url = models.URLField(max_length=255, null=True, blank=True)
     link = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):

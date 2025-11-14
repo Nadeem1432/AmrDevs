@@ -2,6 +2,8 @@ from supabase import create_client
 from django.conf import settings
 import os
 from urllib.parse import unquote
+from supabase import StorageException
+
 
 class SupabaseCustomStorage:
 
@@ -9,6 +11,7 @@ class SupabaseCustomStorage:
         self.client = create_client(settings.SUPABASE_URL, settings.SUPABASE_KEY)
         self.bucket = settings.SUPABASE_BUCKET
         
+
     def upload_file_to_supabase(self, file, bucket_name=None, folder_path=None, is_local_path=True):
         try:
             # If the file is provided as a local path, open it in binary mode
@@ -28,8 +31,15 @@ class SupabaseCustomStorage:
             if folder_path:
                 file_name = f"{folder_path}/{file_name}"
 
-            # Upload the file to the specified bucket
-            response = self.client.storage.from_(bucket_name).upload(file_name, file_content)
+            try:
+                response = self.client.storage.from_(bucket_name).upload(file_name, file_content)
+            except StorageException as e:
+                print("file already exists, trying to overwrite it:", e)
+                response = self.client.storage.from_(bucket_name).update(file_name, file_content)
+                if not response or not hasattr(response, 'path'):
+                    raise Exception("Upload failed or response is invalid")
+                public_url = self.client.storage.from_(bucket_name).get_public_url(file_name)
+                return public_url
             
             # Check if the upload was successful
             if not response or not hasattr(response, 'path'):
@@ -75,8 +85,6 @@ class SupabaseCustomStorage:
 # mngr = SupabaseCustomStorage()
 # upload_file_to_supabase = mngr.upload_file_to_supabase(filepath,folder_path='checking')
 # print(upload_file_to_supabase)
-
 # uploded_file = 'https://oahmpwdnzwwunnwuwvla.supabase.co/storage/v1/object/public/amrdevs/checking/test.py'
 # delete_file_from_supabase = mngr.delete_file_from_supabase(uploded_file)
 # print(delete_file_from_supabase)
-
