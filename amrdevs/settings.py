@@ -54,9 +54,8 @@ CUSTOM_APPS = [     'main',
                     'common'
                  ] 
 THIRD_PARTY_APPS = [    'django_extensions',
-                        'tinymce',
+                        'tinymce'
                         ]
-
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
 MIDDLEWARE = [
@@ -168,8 +167,9 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # media files configuration
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-MEDIA_URL = '/media/'
+
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+# MEDIA_URL = '/media/'
 
 # static files configuration
 STATICFILES_DIRS =[os.path.join(BASE_DIR, 'amrdevs/static')]
@@ -216,3 +216,8 @@ TINYMCE_DEFAULT_CONFIG = {
     "menubar": True,
     "statusbar": True,
 }
+
+# DEFAULT_FILE_STORAGE = 'common.storages.SupabaseStorage'
+SUPABASE_URL = config('SUPABASE_URL')
+SUPABASE_KEY = config('SUPABASE_KEY')
+SUPABASE_BUCKET = config('SUPABASE_BUCKET')

@@ -19,6 +19,7 @@ def send_mail(request):
         cover_letter = request.POST.get('cover_letter', '').strip()
         recipients_raw = request.POST.get('recipients', '')
         recipients = [r.strip() for r in recipients_raw.split(',') if r.strip()]
+        recipients = list(set(recipients))  # Remove duplicates
 
         # Choose resume: either uploaded file (do NOT save to DB) or selected existing resume
         uploaded_file = request.FILES.get('resume_file')

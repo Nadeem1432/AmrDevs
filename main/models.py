@@ -3,6 +3,7 @@ from django.contrib.auth.models import AbstractUser
 from django.conf import settings
 from django.utils import timezone
 import os
+from common.utils import SupabaseCustomStorage
 
 class GeneralFieldsMixin(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
@@ -54,7 +55,7 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.designation}"
-    
+
 
 class Configuration(GeneralFieldsMixin, SocialProfileMixin):
     title = models.CharField(max_length=255)
@@ -64,6 +65,9 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
     logo = models.ImageField(upload_to='webapp_logos/', null=True, blank=True)
     favicon = models.ImageField(upload_to='webapp_favicons/', null=True, blank=True)
     bg_image = models.ImageField(upload_to='webapp_images/', null=True, blank=True)
+    favicon_url = models.URLField(max_length=255, null=True, blank=True)
+    bg_image_url = models.URLField(max_length=255, null=True, blank=True)
+    logo_url = models.URLField(max_length=255, null=True, blank=True)
     web_link = models.URLField(max_length=255, null=True, blank=True)
     address = models.CharField(max_length=250, null=True, blank=True)
     city = models.CharField(max_length=100, null=True, blank=True)
@@ -73,7 +77,45 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        # TODO: also do for logo and bg_image
+        supabase_mngr = SupabaseCustomStorage()
+
+        if self.favicon:
+            folder_path = 'favicons'
+            file = self.favicon
+            public_url = supabase_mngr.upload_file_to_supabase(
+                file=file,
+                folder_path=folder_path,
+                is_local_path=False
+            )
+            if not public_url:
+                raise Exception("Favicon upload failed.")
+            self.favicon_url = public_url
+            self.favicon = None  # Clear the favicon field to avoid saving the file locally
+
+        
+        # Check if updating an existing instance
+        if self.pk is not None:
+            existing_instance = Configuration.objects.get(pk=self.pk)
+            if existing_instance.favicon_url and existing_instance.favicon_url != self.favicon_url:
+                # Delete the existing file from Supabase
+                supabase_mngr.delete_file_from_supabase(existing_instance.favicon_url)
+
+        super().save(*args, **kwargs)
     
+    def delete(self, using=None, keep_parents=False):
+        supabase_mngr = SupabaseCustomStorage()
+        if self.favicon_url:
+            try:
+                # Delete the file from Supabase
+                supabase_mngr.delete_file_from_supabase(self.favicon_url)
+            except Exception as e:
+                print(f"Error deleting file from Supabase: {e}")
+
+        super().delete(using, keep_parents)
+
 class ClientReview(GeneralFieldsMixin):
     client_name = models.CharField(max_length=255)
     client_photo = models.ImageField(upload_to='client_photos/', null=True, blank=True)
