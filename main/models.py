@@ -153,6 +153,8 @@ class ClientReview(GeneralFieldsMixin):
         return f"{self.client_name} - {self.rating}/5"
     
     def delete(self, *args, **kwargs):
+        fields_to_delete = ['client_photo_url']
+        Configuration.delete_files_from_supabase(self, fields_to_delete)
         if self.client_photo:
             try:
                 if os.path.isfile(self.client_photo.path):
@@ -165,6 +167,10 @@ class ClientReview(GeneralFieldsMixin):
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        fields_to_upload = [('client_photo', 'client_photos', 'client_photo_url'),]
+        Configuration.upload_files_to_supabase(self, fields_to_upload)
+        Configuration.delete_unused_files_from_supabase(self, ClientReview, fields_to_upload)
+
         if self.pk is not None:
             existing_instance = ClientReview.objects.get(pk=self.pk)
             if existing_instance.client_photo != self.client_photo:
@@ -185,6 +191,8 @@ class Blog(GeneralFieldsMixin):
         return self.title
     
     def delete(self, *args, **kwargs):
+        fields_to_delete = ['cover_image_url']
+        Configuration.delete_files_from_supabase(self, fields_to_delete)
         if self.cover_image:
             try:
                 if os.path.isfile(self.cover_image.path):
@@ -197,6 +205,10 @@ class Blog(GeneralFieldsMixin):
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
+        fields_to_upload = [ ('cover_image', 'blog_covers', 'cover_image_url'),]
+        Configuration.upload_files_to_supabase(self, fields_to_upload)
+        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+
         if self.pk is not None:
             existing_instance = ClientReview.objects.get(pk=self.pk)
             if existing_instance.cover_image != self.cover_image:
@@ -214,7 +226,18 @@ class Service(GeneralFieldsMixin):
 
     def __str__(self):
         return self.name
+
+    def save(self, *args, **kwargs):
+        fields_to_upload = [ ('image', 'service_images', 'image_url'),]
+        Configuration.upload_files_to_supabase(self, fields_to_upload)
+        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        super().save(*args, **kwargs)
     
+    def delete(self, *args, **kwargs):
+        fields_to_delete = ['image_url']
+        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        super().delete(*args, **kwargs)
+
 class Conversation(GeneralFieldsMixin):
     sender_name = models.CharField(max_length=255)
     sender_email = models.EmailField()
@@ -240,6 +263,17 @@ class Project(GeneralFieldsMixin):
     def __str__(self):
         return self.title
     
+    def save(self, *args, **kwargs):
+        fields_to_upload = [ ('image', 'project_images', 'image_url'),]
+        Configuration.upload_files_to_supabase(self, fields_to_upload)
+        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        fields_to_delete = ['image_url']
+        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        super().delete(*args, **kwargs)
+
 class Carousel(GeneralFieldsMixin):
     title = models.CharField(max_length=255)
     description = models.TextField(null=True, blank=True)
@@ -249,6 +283,17 @@ class Carousel(GeneralFieldsMixin):
 
     def __str__(self):
         return self.title
+
+    def save(self, *args, **kwargs):
+        fields_to_upload = [ ('image', 'carousel_images', 'image_url'),]
+        Configuration.upload_files_to_supabase(self, fields_to_upload)
+        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        fields_to_delete = ['image_url']
+        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        super().delete(*args, **kwargs)
 
     class Meta:
         ordering = ['id']
