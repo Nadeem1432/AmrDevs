@@ -52,9 +52,28 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
     designation = models.CharField(max_length=100)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
+    profile_picture_url = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.designation}"
+    
+    def save(self, *args, **kwargs):
+        fields_to_upload = [('profile_picture', 'team_pictures', 'profile_picture_url'),]
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, TeamMember, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, TeamMember, fields_to_upload)
+        super().save(*args, **kwargs)
+    
+    def delete(self, *args, **kwargs):
+        if settings.PRODUCTION:
+            fields_to_delete = ['profile_picture_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['profile_picture']
+            Configuration.delete_file_from_local(TeamMember, fields_to_delete)
+        super().delete(*args, **kwargs) 
 
 
 class Configuration(GeneralFieldsMixin, SocialProfileMixin):
@@ -105,6 +124,21 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
                     mngr.delete_file_from_supabase(existing_url)
 
     @staticmethod
+    def delete_file_from_local(instance, fields_to_delete):
+        """ Delete a local file associated with the given field of the instance.
+        """
+        for field in fields_to_delete:
+            file = getattr(instance, field)
+            if file:
+                try:
+                    if os.path.isfile(file.path):
+                        os.remove(file.path)
+                    else:
+                        print(f"File not found: {file.path}")
+                except Exception as e:
+                    print(f"Error deleting file: {e}")
+
+    @staticmethod
     def delete_files_from_supabase(instance, fields_to_delete):
         """
         Delete files from Supabase based on the provided URL fields.
@@ -118,26 +152,42 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
                 except Exception as e:
                     print(f"Error deleting file from Supabase: {e}")
 
+    @staticmethod
+    def delete_unused_files_from_local(instance, model, fields_to_delete):
+        if instance.pk is not None:
+            existing_instance = model.objects.get(pk=instance.pk)
+            for field ,_ ,_  in fields_to_delete:
+                existing_file = getattr(existing_instance, field)
+                new_file = getattr(instance, field)
+                if existing_file and existing_file != new_file:
+                    try:
+                        if os.path.isfile(existing_file.path):
+                            os.remove(existing_file.path)
+                        else:
+                            print(f"File not found: {existing_file.path}")
+                    except Exception as e:
+                        print(f"Error deleting file: {e}")
+
     def save(self, *args, **kwargs):
         fields_to_upload = [
             ('favicon', 'favicons', 'favicon_url'),
             ('logo', 'logos', 'logo_url'),
-            ('bg_image', 'bg_images', 'bg_image_url'),
-        ]
+            ('bg_image', 'bg_images', 'bg_image_url'), ]
 
-        # Upload new files to Supabase
-        self.upload_files_to_supabase(self, fields_to_upload)
-        
-        # Delete unused files from Supabase
-        self.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
-
+        if settings.PRODUCTION:
+            self.upload_files_to_supabase(self, fields_to_upload) # Upload new files to Supabase
+            self.delete_unused_files_from_supabase(self, Configuration, fields_to_upload) # Delete unused files from Supabase
+        else:
+            self.delete_unused_files_from_local(self, Configuration, fields_to_upload) # Delete unused local files
         super().save(*args, **kwargs)
 
     def delete(self, using=None, keep_parents=False):
-        fields_to_delete = ['favicon_url', 'logo_url', 'bg_image_url']
-        # Delete files from Supabase
-        self.delete_files_from_supabase(self, fields_to_delete)
-
+        if settings.PRODUCTION:
+            fields_to_delete = ['favicon_url', 'logo_url', 'bg_image_url']
+            self.delete_files_from_supabase(self, fields_to_delete)  # Delete files from Supabase
+        else:
+            fields_to_delete = ['favicon','logo', 'bg_image']
+            self.delete_file_from_local(self, fields_to_delete)  # Delete local file
         super().delete(using, keep_parents)
 
 class ClientReview(GeneralFieldsMixin):
@@ -153,30 +203,22 @@ class ClientReview(GeneralFieldsMixin):
         return f"{self.client_name} - {self.rating}/5"
     
     def delete(self, *args, **kwargs):
-        fields_to_delete = ['client_photo_url']
-        Configuration.delete_files_from_supabase(self, fields_to_delete)
-        if self.client_photo:
-            try:
-                if os.path.isfile(self.client_photo.path):
-                    os.remove(self.client_photo.path)
-                    print(f"Deleted file: {self.client_photo.path}")
-                else:
-                    print(f"File not found: {self.client_photo.path}")
-            except Exception as e:
-                print(f"Error deleting file: {e}")
+        if settings.PRODUCTION:
+            fields_to_delete = ['client_photo_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['client_photo']
+            Configuration.delete_file_from_local(ClientReview, fields_to_delete)
+
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         fields_to_upload = [('client_photo', 'client_photos', 'client_photo_url'),]
-        Configuration.upload_files_to_supabase(self, fields_to_upload)
-        Configuration.delete_unused_files_from_supabase(self, ClientReview, fields_to_upload)
-
-        if self.pk is not None:
-            existing_instance = ClientReview.objects.get(pk=self.pk)
-            if existing_instance.client_photo != self.client_photo:
-                if existing_instance.client_photo:
-                    if os.path.isfile(existing_instance.client_photo.path):
-                        os.remove(existing_instance.client_photo.path)
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, ClientReview, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, ClientReview, fields_to_upload)
         super().save(*args, **kwargs)
 
 class Blog(GeneralFieldsMixin):
@@ -191,30 +233,22 @@ class Blog(GeneralFieldsMixin):
         return self.title
     
     def delete(self, *args, **kwargs):
-        fields_to_delete = ['cover_image_url']
-        Configuration.delete_files_from_supabase(self, fields_to_delete)
-        if self.cover_image:
-            try:
-                if os.path.isfile(self.cover_image.path):
-                    os.remove(self.cover_image.path)
-                    print(f"Deleted file: {self.cover_image.path}")
-                else:
-                    print(f"File not found: {self.cover_image.path}")
-            except Exception as e:
-                print(f"Error deleting file: {e}")
+        if settings.PRODUCTION:
+            fields_to_delete = ['cover_image_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['cover_image']
+            Configuration.delete_file_from_local(Blog, fields_to_delete)
+
         super().delete(*args, **kwargs)
 
     def save(self, *args, **kwargs):
         fields_to_upload = [ ('cover_image', 'blog_covers', 'cover_image_url'),]
-        Configuration.upload_files_to_supabase(self, fields_to_upload)
-        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
-
-        if self.pk is not None:
-            existing_instance = ClientReview.objects.get(pk=self.pk)
-            if existing_instance.cover_image != self.cover_image:
-                if existing_instance.cover_image:
-                    if os.path.isfile(existing_instance.cover_image.path):
-                        os.remove(existing_instance.cover_image.path)
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, Blog, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, Blog, fields_to_upload)
         super().save(*args, **kwargs)
     
 class Service(GeneralFieldsMixin):
@@ -229,13 +263,21 @@ class Service(GeneralFieldsMixin):
 
     def save(self, *args, **kwargs):
         fields_to_upload = [ ('image', 'service_images', 'image_url'),]
-        Configuration.upload_files_to_supabase(self, fields_to_upload)
-        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, Service, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, Service, fields_to_upload)
+
         super().save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
-        fields_to_delete = ['image_url']
-        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        if settings.PRODUCTION:
+            fields_to_delete = ['image_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['image']
+            Configuration.delete_file_from_local(Service, fields_to_delete)    
         super().delete(*args, **kwargs)
 
 class Conversation(GeneralFieldsMixin):
@@ -265,13 +307,20 @@ class Project(GeneralFieldsMixin):
     
     def save(self, *args, **kwargs):
         fields_to_upload = [ ('image', 'project_images', 'image_url'),]
-        Configuration.upload_files_to_supabase(self, fields_to_upload)
-        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, Project, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, Project, fields_to_upload)
         super().save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
-        fields_to_delete = ['image_url']
-        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        if settings.PRODUCTION:
+            fields_to_delete = ['image_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['image']
+            Configuration.delete_file_from_local(Project, fields_to_delete)
         super().delete(*args, **kwargs)
 
 class Carousel(GeneralFieldsMixin):
@@ -286,13 +335,21 @@ class Carousel(GeneralFieldsMixin):
 
     def save(self, *args, **kwargs):
         fields_to_upload = [ ('image', 'carousel_images', 'image_url'),]
-        Configuration.upload_files_to_supabase(self, fields_to_upload)
-        Configuration.delete_unused_files_from_supabase(self, Configuration, fields_to_upload)
+        if settings.PRODUCTION:
+            Configuration.upload_files_to_supabase(self, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, Carousel, fields_to_upload)
+        else:
+            Configuration.delete_unused_files_from_local(self, Carousel, fields_to_upload)
         super().save(*args, **kwargs)
     
     def delete(self, *args, **kwargs):
-        fields_to_delete = ['image_url']
-        Configuration.delete_files_from_supabase(self, fields_to_delete)
+        if settings.PRODUCTION:
+            fields_to_delete = ['image_url']
+            Configuration.delete_files_from_supabase(self, fields_to_delete)
+        else:
+            fields_to_delete = ['image']
+            Configuration.delete_file_from_local(Carousel, fields_to_delete)
+
         super().delete(*args, **kwargs)
 
     class Meta:
