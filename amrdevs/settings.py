@@ -167,10 +167,8 @@ USE_TZ = True
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # media files configuration
-
-if not PRODUCTION:
-    MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
-    MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+MEDIA_URL = '/media/'
 
 # static files configuration
 STATICFILES_DIRS =[os.path.join(BASE_DIR, 'amrdevs/static')]
