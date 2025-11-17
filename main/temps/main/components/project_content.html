@@ -1,3 +1,4 @@
+{% load static%}
 <div class="container-fluid project">
     <div class="container">
         <div class="text-center mx-auto pb-5 wow fadeInUp mt-2" data-wow-delay="0.1s" style="max-width: 800px;">
@@ -9,7 +10,8 @@
                 {% for item in project %}
             <div class="project-item h-100 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="project-img">
-                    <img src="{{item.image.url}}" class="img-fluid w-100 rounded" alt="Image">
+                    <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                     class="img-fluid w-100 rounded" alt="Image">
                 </div>
                 <div class="project-content bg-light rounded p-4">
                     <div class="project-content-inner">

@@ -1,3 +1,5 @@
+{% load static%}
+
 <div class="container-fluid team pb-5">
     <div class="container pb-5">
         <div class="text-center mx-auto pt-3 pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
@@ -12,7 +14,8 @@
             <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
                 <div class="team-item rounded">
                     <div class="team-img">
-                        <img src="{{ item.profile_picture.url}}" class="img-fluid w-100 rounded-top" alt="Image">
+                        <img src="{% if item.profile_picture_url %}{{item.profile_picture_url}}{% elif item.profile_picture %}{{item.profile_picture.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                         class="img-fluid w-100 rounded-top" alt="Image">
                         <div class="team-icon">
                             <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" href=""><i class="fas fa-share-alt"></i></a>
                             <div class="team-icon-share">

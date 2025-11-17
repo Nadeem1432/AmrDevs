@@ -31,8 +31,11 @@ Index | AmrDevs
             {% if forloop.counter|divisibleby:3 %}
             <div class="header-carousel-item">
             <div class="header-carousel-item-img-3">
-                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+ 
+                <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                 class="img-fluid w-100" alt="Image"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
+
             </div>
             <div class="carousel-caption my-3">
                 <div class="carousel-caption-inner text-center text-md-end p-3 p-md-5"
@@ -64,8 +67,10 @@ Index | AmrDevs
             {% elif forloop.counter|divisibleby:2 %}
             <div class="header-carousel-item mx-auto">
             <div class="header-carousel-item-img-2">
-                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+                <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                 class="img-fluid w-100" alt="Image"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
+
             </div>
             <div class="carousel-caption">
                 <div class="carousel-caption-inner text-center p-3 p-md-5"
@@ -97,7 +102,8 @@ Index | AmrDevs
             {% else %}
             <div class="header-carousel-item">
             <div class="header-carousel-item-img-1">
-                <img src="{{item.image.url}}" class="img-fluid w-100" alt="Image"
+                <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                 class="img-fluid w-100" alt="Image"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
             </div>
             <div class="carousel-caption">
@@ -173,7 +179,8 @@ Index | AmrDevs
                                 </div>
                             </div>
                             <div class="project-img">
-                                <img src="{{item.cover_image.url}}" class="img-fluid w-100 rounded" alt="Image">
+                                <img src="{% if item.cover_image_url %}{{item.cover_image_url}}{% elif item.cover_image %}{{item.cover_image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                                 class="img-fluid w-100 rounded" alt="Image">
                                 <div class="blog-plus-icon">
                                     <a href="{{item.cover_image.url}}" data-lightbox="blog-1" class="btn btn-primary btn-md-square rounded-pill"><i class="fas fa-plus fa-1x"></i></a>
                                 </div>
