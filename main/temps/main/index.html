@@ -175,7 +175,7 @@ Index | AmrDevs
                                 <h4 class="text-primary mb-2">{{item.type}}</h4>
                                 <div class="d-flex justify-content-between">
                                     <p class="mb-0"><span class="text-dark fw-bold">On</span> {{ item.published_date|date:"M d, Y" }}</p>
-                                    <p class="mb-0"><span class="text-dark fw-bold">By</span> {{item.author.first_name}}</p>
+                                    {% comment %} <p class="mb-0"><span class="text-dark fw-bold">By</span> {{item.author.first_name}}</p> {% endcomment %}
                                 </div>
                             </div>
                             <div class="project-img">
