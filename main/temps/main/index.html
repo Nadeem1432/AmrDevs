@@ -182,7 +182,8 @@ Index | AmrDevs
                                 <img src="{% if item.cover_image_url %}{{item.cover_image_url}}{% elif item.cover_image %}{{item.cover_image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
                                  class="img-fluid w-100 rounded" alt="Image">
                                 <div class="blog-plus-icon">
-                                    <a href="{{item.cover_image.url}}" data-lightbox="blog-1" class="btn btn-primary btn-md-square rounded-pill"><i class="fas fa-plus fa-1x"></i></a>
+                                    <a href="{% if item.cover_image_url %}{{item.cover_image_url}}{% elif item.cover_image %}{{item.cover_image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
+                                     data-lightbox="blog-1" class="btn btn-primary btn-md-square rounded-pill"><i class="fas fa-plus fa-1x"></i></a>
                                 </div>
                             </div>
                             <div class="my-4">
