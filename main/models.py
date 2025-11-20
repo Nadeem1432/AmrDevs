@@ -52,16 +52,16 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
     designation = models.CharField(max_length=100)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
-    profile_picture_url = models.CharField(max_length=255, null=True, blank=True)
+    profile_picture_url = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.designation}"
     
-    def save(self, *args, **kwargs):# TODO remove debug statement
+    def save(self, *args, **kwargs):
         fields_to_upload = [('profile_picture', 'team_pictures', 'profile_picture_url'),]
         if settings.PRODUCTION:
             Configuration.upload_files_to_supabase(self, fields_to_upload)
-            Configuration.delete_unused_files_from_snupabase(self, TeamMember, fields_to_upload)
+            Configuration.delete_unused_files_from_supabase(self, TeamMember, fields_to_upload)
         else:
             Configuration.delete_unused_files_from_local(self, TeamMember, fields_to_upload)
 
