@@ -355,3 +355,10 @@ class Carousel(GeneralFieldsMixin):
 
     class Meta:
         ordering = ['id']
+
+class FAQ(GeneralFieldsMixin):
+    question = models.CharField(max_length=500)
+    answer = models.TextField()
+
+    def __str__(self):
+        return self.question
