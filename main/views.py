@@ -68,7 +68,6 @@ def contact(request):
                 #                 [email],
                 #                 fail_silently=False)
                 # context.update({'popup':"submitted",'message':f'Thank you {name}'})
-                # import pdb; pdb.set_trace()
                 body = full_detail
                 provider_settings = settings.EMAIL_PROVIDERS.get("amrdevs")
                 connection = get_connection(
