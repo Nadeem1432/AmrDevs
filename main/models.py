@@ -52,7 +52,7 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
     designation = models.CharField(max_length=100)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
-    profile_picture_url = models.URLField(max_length=625, null=True, blank=True)
+    profile_picture_url = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.designation}"
@@ -66,7 +66,7 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
             Configuration.delete_unused_files_from_local(self, TeamMember, fields_to_upload)
 
         super().save(*args, **kwargs)
-    
+
     def delete(self, *args, **kwargs):
         if settings.PRODUCTION:
             fields_to_delete = ['profile_picture_url']
