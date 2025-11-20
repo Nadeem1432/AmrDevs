@@ -4,12 +4,8 @@
       "src": "amrdevs/wsgi.py",
       "use": "@vercel/python",
       "config": { "runtime": "python3.11", "maxLambdaSize": "50mb", "maxDuration": 60 }
-    },
-    {
-      "src": "build.sh",
-      "use": "@vercel/static-build",
-      "config": { "distDir": ".vercel/output" }
     }
+    
   ],
   "routes": [
     {
