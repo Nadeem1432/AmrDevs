@@ -52,7 +52,7 @@ class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
     designation = models.CharField(max_length=100)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
-    profile_picture_url = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
+    profile_picture_url = models.URLField(max_length=255, null=True, blank=True)
 
     def __str__(self):
         return f"{self.user.first_name} {self.user.last_name} - {self.designation}"
