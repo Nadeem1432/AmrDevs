@@ -1,21 +1,35 @@
 {
   "version": 2,
+
   "buildCommand": "bash build.sh",
+
   "builds": [
     {
       "src": "amrdevs/wsgi.py",
       "use": "@vercel/python",
-      "config": { "runtime": "python3.11", "maxLambdaSize": "50mb", "maxDuration": 60 }
+      "config": {
+        "runtime": "python3.11",
+        "maxLambdaSize": "50mb",
+        "maxDuration": 60
+      }
+    },
+    {
+      "src": "staticfiles/**/*",
+      "use": "@vercel/static"
     }
-    
   ],
-  
+
   "routes": [
+    {
+      "src": "/static/(.*)",
+      "dest": "/static/$1"
+    },
     {
       "src": "/(.*)",
       "dest": "/amrdevs/wsgi.py"
     }
   ],
+
   "env": {
     "DJANGO_SETTINGS_MODULE": "amrdevs.settings",
     "PYTHONUNBUFFERED": "1"
