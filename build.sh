@@ -4,8 +4,15 @@
 pip install -r requirements.txt
 
 # Run migrations
+echo "Applying database migrations1432..."
 python manage.py makemigrations
 python manage.py migrate
+
+echo "Applying migrations for 'main' app..."
+python manage.py migrate main
+
+echo "Database migrations applied."
+
 
 # Optional: Create superuser (only if not exists)
 echo "from django.contrib.auth import get_user_model; \
