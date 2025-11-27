@@ -17,4 +17,11 @@
       "dest": "/amrdevs/wsgi.py"
     }
   ]
+
+  ,
+  "functions": {
+    "amrdevs/wsgi.py": {
+      "maxDuration": 60
+    }
+  }
 }
