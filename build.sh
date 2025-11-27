@@ -45,6 +45,7 @@ echo "Applying database migrations..."
 
 # python manage.py migrate main 0011 --fake
 python manage.py migrate main 0012 --fake
+python manage.py migrate main 0013 --fake
 python manage.py migrate --noinput
 echo "Database migrations applied."
 
