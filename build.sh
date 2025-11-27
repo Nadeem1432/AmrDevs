@@ -34,7 +34,7 @@
 #!/bin/bash
 
 # --- 1. Install Dependencies ---
-pip install -r requirements.txt
+# pip install -r requirements.txt
 
 # --- 2. Apply Database Migrations ---
 # NOTE: This step requires the production database URL to be configured
@@ -42,6 +42,7 @@ pip install -r requirements.txt
 echo "Applying database migrations..."
 # Only run the general migrate command (which covers all apps)
 # The --noinput flag prevents any interactive prompts.
+
 # python manage.py migrate main 0011 --fake
 python manage.py migrate main 0012 --fake
 python manage.py migrate --noinput
