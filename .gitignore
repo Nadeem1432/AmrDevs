@@ -14,3 +14,5 @@ __pycache__/
 
 # Ignore other common cache files
 *.log
+.vercel
+.env*.local

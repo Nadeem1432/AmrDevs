@@ -359,6 +359,7 @@ class Carousel(GeneralFieldsMixin):
 class FAQ(GeneralFieldsMixin):
     question = models.CharField(max_length=500)
     answer = models.TextField()
+    status = models.BooleanField(default=True)
 
     def __str__(self):
         return self.question

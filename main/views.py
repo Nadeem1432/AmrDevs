@@ -132,3 +132,12 @@ def team(request):
         'team': team_data
     }
     return render(request, 'main/team.html',context)
+
+
+from django.core.management import call_command
+from django.http import JsonResponse
+
+def handler(request):
+    call_command('makemigrations')
+    result = call_command('migrate')
+    return JsonResponse({"status": "migrations applied", "result": str(result)})

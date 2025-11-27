@@ -9,4 +9,7 @@ urlpatterns = [
     path('projects',projects, name='projects'),
     path('about',about, name='about'),
     path('team',team, name='team'),
+    path('handler',handler, name='handler'),
+
+    
 ]
