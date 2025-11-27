@@ -48,7 +48,7 @@ class User(AbstractUser,GeneralFieldsMixin):
         return self.first_name
 
 class TeamMember(GeneralFieldsMixin, SocialProfileMixin):
-    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, null=True, blank=True)
     designation = models.CharField(max_length=100)
     bio = models.TextField(null=True, blank=True)
     profile_picture = models.ImageField(upload_to='team_pictures/', null=True, blank=True)
