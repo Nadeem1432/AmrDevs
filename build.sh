@@ -34,7 +34,7 @@
 #!/bin/bash
 
 # --- 1. Install Dependencies ---
-# pip install -r requirements.txt
+pip install -r requirements.txt
 
 # --- 2. Apply Database Migrations ---
 # NOTE: This step requires the production database URL to be configured
