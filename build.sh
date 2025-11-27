@@ -43,7 +43,7 @@ echo "Applying database migrations..."
 # Only run the general migrate command (which covers all apps)
 # The --noinput flag prevents any interactive prompts.
 python manage.py migrate --noinput
-python manage.py migrate main 0011 --fake
+# python manage.py migrate main 0011 --fake
 echo "Database migrations applied."
 
 # --- 3. Optional: Create superuser (only if not exists) ---
