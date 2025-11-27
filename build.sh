@@ -44,18 +44,19 @@ echo "Applying database migrations..."
 # The --noinput flag prevents any interactive prompts.
 
 # python manage.py migrate main 0011 --fake
-python manage.py migrate main 0012 --fake
-python manage.py migrate main 0013 --fake
+# python manage.py migrate main 0012 --fake
+# python manage.py migrate main 0013 --fake
+
 python manage.py migrate --noinput
 echo "Database migrations applied."
 
 # --- 3. Optional: Create superuser (only if not exists) ---
-echo "Creating/verifying admin user..."
-echo "from django.contrib.auth import get_user_model; \
-User = get_user_model(); \
-User.objects.filter(username='admin').exists() or \
-User.objects.create_superuser('admin', 'admin@example.com', 'adminpass')" \
-| python manage.py shell
+# echo "Creating/verifying admin user..."
+# echo "from django.contrib.auth import get_user_model; \
+# User = get_user_model(); \
+# User.objects.filter(username='username').exists() or \
+# User.objects.create_superuser('username', 'user@example.com', 'userpass')" \
+# | python manage.py shell
 
 # --- 4. Collect static files ---
 python manage.py collectstatic --noinput
