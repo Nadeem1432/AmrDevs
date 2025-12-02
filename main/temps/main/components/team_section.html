@@ -18,10 +18,10 @@
                  class="img-fluid w-100 rounded-top" alt="Image" style="object-fit: cover; object-position: top; height: 100%;">
                 <div class="team-icon">
                     <div class="team-icon-share">
-                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.linkedin %} href="{{item.linkedin}}" {% endif %}><i title="LinkedIn" class="fab fa-linkedin"></i></a>
-                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.website %} href="{{item.website}}" {% endif %}><i title="website" class="fab fa-chrome"></i></a>
-                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-0" {% if item.instagram %} href="{{item.instagram}}" {% endif %}><i title="instagram" class="fab fa-instagram"></i></a>
-                    </div>
+                        <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.linkedin %} href="{{item.linkedin}}" {% endif %} target="_blank" rel="noopener" ><i title="LinkedIn" class="fab fa-linkedin"></i></a>
+                        <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.website %} href="{{item.website}}" {% endif %} target="_blank" rel="noopener" ><i title="website" class="fab fa-chrome"></i></a>
+                        <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-0" {% if item.instagram %} href="{{item.instagram}}" {% endif %} target="_blank" rel="noopener"><i title="instagram" class="fab fa-instagram"></i></a>
+                    </div>                    
                 </div>
                 </div>
                 <div class="team-content bg-dark text-center rounded-bottom p-4 mt-auto">
