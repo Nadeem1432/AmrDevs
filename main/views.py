@@ -11,7 +11,7 @@ def index(request):
     service_data = Service.objects.filter(status=True)
     project_data = Project.objects.filter(status=True)
     blog_data = Blog.objects.filter(status=True)
-    team_data = TeamMember.objects.filter(status=True)
+    team_data = TeamMember.objects.filter(status=True).order_by('id')
     client_review = ClientReview.objects.filter(status=True)
     context = {
         'config': config_data,
@@ -125,7 +125,7 @@ def about(request):
     return render(request, 'main/about.html',context)
 
 def team(request):
-    team_data = TeamMember.objects.filter(status=True)
+    team_data = TeamMember.objects.filter(status=True).order_by('-id')
     config_data = Configuration.objects.last()
     context = {
         'config': config_data,

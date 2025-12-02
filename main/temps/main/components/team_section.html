@@ -6,35 +6,35 @@
             {% if request.resolver_match.url_name != 'team' %}
             <h4 class="text-primary">Our Team</h4>
             {% endif %}
-            <h1 class="display-4">Our Investa Company Dedicated Team Member</h1>
+            <h1 class="display-4">Our Highly-Skilled Team</h1>
         </div>
         {% if team %}
         <div class="row g-4 justify-content-center">
             {% for item in team %}
             <div class="col-sm-6 col-md-6 col-lg-4 col-xl-3 wow fadeInUp" data-wow-delay="0.1s">
-                <div class="team-item rounded">
-                    <div class="team-img">
-                        <img src="{% if item.profile_picture_url %}{{item.profile_picture_url}}{% elif item.profile_picture %}{{item.profile_picture.url}}{% else %}{% static 'img/team_dummy.png' %}{% endif %}"
-                        {% comment %} <img src="{% static 'img/team_dummy.png' %}" {% endcomment %}
-                         class="img-fluid w-100 rounded-top" alt="Image">
-                        <div class="team-icon">
-                            <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" href=""><i class="fas fa-share-alt"></i></a>
-                            <div class="team-icon-share">
-                                <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" href={{item.facebook}}><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" href={{item.twitter}}><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-0" href={{item.instagram}}><i class="fab fa-instagram"></i></a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="team-content bg-dark text-center rounded-bottom p-4">
-                        <div class="team-content-inner rounded-bottom">
-                            <h4 class="text-white">{{item.user.get_full_name}}</h4>
-                            <p class="text-muted mb-0">{{item.designation}}</p>
-                        </div>
+            <div class="team-item rounded h-100 d-flex flex-column">
+                <div class="team-img" style="overflow: hidden; height: 370px;">
+                <img src="{% if item.profile_picture_url %}{{item.profile_picture_url}}{% elif item.profile_picture %}{{item.profile_picture.url}}{% else %}{% static 'img/team_dummy.png' %}{% endif %}"
+                 class="img-fluid w-100 rounded-top" alt="Image" style="object-fit: cover; object-position: top; height: 100%;">
+                <div class="team-icon">
+                    <div class="team-icon-share">
+                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.linkedin %} href="{{item.linkedin}}" {% endif %}><i title="LinkedIn" class="fab fa-linkedin"></i></a>
+                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-3" {% if item.website %} href="{{item.website}}" {% endif %}><i title="website" class="fab fa-chrome"></i></a>
+                    <a class="btn btn-primary btn-sm-square text-white rounded-circle mb-0" {% if item.instagram %} href="{{item.instagram}}" {% endif %}><i title="instagram" class="fab fa-instagram"></i></a>
                     </div>
                 </div>
+                </div>
+                <div class="team-content bg-dark text-center rounded-bottom p-4 mt-auto">
+                <div class="team-content-inner rounded-bottom">
+                    <h4 class="text-white">{{item.user.get_full_name}}</h4>
+                    <p class="text-muted mb-0">{{item.designation}}</p>
+                </div>
+                </div>
+            </div>
             </div>
             {% endfor %}
+        {% comment %} </div>
+            {% endfor %} {% endcomment %}
 
             {% else %}
             <div class="col-12">
