@@ -216,7 +216,8 @@
                             </div> {% endcomment %}
                             {% for post in posts %}
                             <div class="d-flex flex-column mb-3">
-                                <p class="text-uppercase text-primary mb-2">Blog</p>
+                                {% comment %} <p class="text-uppercase text-primary mb-2">Blog</p> {% endcomment %}
+                                
                                 <a  class="text-body">{{ post.title }}</a> 
                             </div>
                             {% endfor %}
@@ -242,7 +243,7 @@
                         <span class="text-body"><a href="{% url 'index' %}" class="border-bottom text-primary"><i class="fas fa-copyright text-light me-2">{% now "Y" %}</i>{{config.short_title|default:"Your Site Name"}}</a>, All right reserved.</span>
                     </div>
                     <div class="col-md-6 text-center text-md-end text-body">
-                        Developed By- <a class="border-bottom text-primary" href="{{config.linkedin}}"> {{ config.created_by.first_name|add:" " }}{{ config.created_by.last_name }}</a>
+                        Developer- <a class="border-bottom text-primary" href="{{config.linkedin}}"> {% if config.created_by %} {{ config.created_by.first_name|add:" " }}{{ config.created_by.last_name }} {% else %} {{config.short_title}}  {% endif %} </a>
                     </div>
                 </div>
             </div>

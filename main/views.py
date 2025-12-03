@@ -13,6 +13,7 @@ def index(request):
     blog_data = Blog.objects.filter(status=True)
     team_data = TeamMember.objects.filter(status=True).order_by('id')
     client_review = ClientReview.objects.filter(status=True)
+    lates_two_blogs = blog_data.only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
         'carousel': carousel_data,
@@ -20,7 +21,8 @@ def index(request):
         'project': project_data,
         'blog': blog_data,
         'team': team_data,
-        'review': client_review
+        'review': client_review,
+        'posts': lates_two_blogs
     }
     return render(request, 'main/index.html',context)
 
@@ -29,16 +31,18 @@ def services(request):
     service_data = Service.objects.filter(status=True)
     client_review = ClientReview.objects.filter(status=True)
     config_data = Configuration.objects.last()
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
         'service': service_data,
-        'review': client_review
+        'review': client_review,
+        'posts': lates_two_blogs
     }
     return render(request, 'main/service.html',context)
 
 def contact(request):
     config_data = Configuration.objects.last()
-    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:2]
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
         'posts': lates_two_blogs
@@ -111,27 +115,33 @@ def contact(request):
 def projects(request):
     project_data = Project.objects.filter(status=True)
     config_data = Configuration.objects.last()
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
-        'project': project_data
+        'project': project_data,
+        'posts': lates_two_blogs
     }
     return render(request, 'main/project.html',context)
 
 def about(request):
     config_data = Configuration.objects.last()
     team_data = TeamMember.objects.filter(status=True).order_by('id')
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
         'team': team_data,
+        'posts': lates_two_blogs
     }
     return render(request, 'main/about.html',context)
 
 def team(request):
     team_data = TeamMember.objects.filter(status=True).order_by('id')
     config_data = Configuration.objects.last()
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
-        'team': team_data
+        'team': team_data,
+        'posts': lates_two_blogs
     }
     return render(request, 'main/team.html',context)
 
