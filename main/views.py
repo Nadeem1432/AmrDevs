@@ -38,8 +38,10 @@ def services(request):
 
 def contact(request):
     config_data = Configuration.objects.last()
+    lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:2]
     context = {
         'config': config_data,
+        'posts': lates_two_blogs
     }
     if request.method == 'POST':
         try:
@@ -117,7 +119,7 @@ def projects(request):
 
 def about(request):
     config_data = Configuration.objects.last()
-    team_data = TeamMember.objects.filter(status=True)
+    team_data = TeamMember.objects.filter(status=True).order_by('id')
     context = {
         'config': config_data,
         'team': team_data,
@@ -125,7 +127,7 @@ def about(request):
     return render(request, 'main/about.html',context)
 
 def team(request):
-    team_data = TeamMember.objects.filter(status=True).order_by('-id')
+    team_data = TeamMember.objects.filter(status=True).order_by('id')
     config_data = Configuration.objects.last()
     context = {
         'config': config_data,

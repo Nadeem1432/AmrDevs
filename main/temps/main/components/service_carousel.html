@@ -24,7 +24,9 @@
 <div class="container-fluid service py-5">
         <div class="container py-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+                {% if request.resolver_match.url_name != 'services' %}                        
                         <h4 class="text-primary">Our Services</h4>
+                {% endif %}
                         <h1 class="display-4"> Offering the Best IT Consulting Services</h1>
                 </div>
                 <div class="row g-4 justify-content-center text-center align-items-stretch">

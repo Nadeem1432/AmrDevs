@@ -2,7 +2,9 @@
 <div class="container-fluid project">
     <div class="container">
         <div class="text-center mx-auto pb-5 wow fadeInUp mt-2" data-wow-delay="0.1s" style="max-width: 800px;">
+        {% if request.resolver_match.url_name != 'projects' %}
             <h4 class="text-primary">Our Projects</h4>
+        {% endif %}
             <h1 class="display-4">Explore Our Latest Projects</h1>
         </div>
         {% if project %}
