@@ -190,7 +190,7 @@
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
                             <h4 class="text-white mb-4">Contact Info</h4>
-                            <a href=""><i class="fa fa-map-marker-alt me-2"></i> {{config.address|default:"Add address"}}</a>
+                            <a href=""><i class="fa fa-map-marker-alt me-2"></i>  {% if config.city %} {{ config.city }} {{ config.state }} {{ config.pincode }} {% else %} Add Adress {% endif %} </a>
                             <a href=""><i class="fas fa-envelope me-2"></i> {{config.email|default:"Add Email"}}</a>
                             <a href=""><i class="fas fa-phone me-2"></i> {{config.phone|default:"Add Phone Number"}}</a>
                             <div class="d-flex align-items-center">

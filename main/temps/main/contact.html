@@ -121,17 +121,17 @@ Contact Us | AmrDevs
     
     function initMap() {
         // 1. Define AmrDevs Company Location (Near Qadri Masjid, Amroha)
-        const amroha = { lat: 28.9095, lng: 78.4586 }; 
+        const office_location = { lat: {{config.lat}}, lng: {{config.lng}} }; 
 
         // 2. Initialize Map centered on AmrDevs
         const map = new google.maps.Map(document.getElementById("map-canvas"), {
             zoom: 12,
-            center: amroha,
+            center: office_location,
         });
 
         // 3. Add AmrDevs Marker (Red/Company Color)
         new google.maps.Marker({
-            position: amroha,
+            position: office_location,
             map: map,
             title: "AmrDevs Location",
             // Using a specific color icon to represent the company
