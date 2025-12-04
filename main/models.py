@@ -94,6 +94,8 @@ class Configuration(GeneralFieldsMixin, SocialProfileMixin):
     state = models.CharField(max_length=100, null=True, blank=True)
     country = models.CharField(max_length=100, null=True, blank=True)
     pincode = models.CharField(max_length=50, null=True, blank=True)
+    lat = models.CharField(max_length=50, null=True, blank=True)
+    lng = models.CharField(max_length=50, null=True, blank=True)
 
     def __str__(self):
         return self.title

@@ -191,6 +191,7 @@ EMAIL_PROVIDERS = {
         "USER": config('EMAIL_HOST_USER'),
         "PASSWORD": config('EMAIL_HOST_PASSWORD'),
         "USE_TLS": True,
+        "Receiver_EMAIL": config('RECEIVER_EMAIL'),
     },
     "jobportal": {
         "HOST": "smtp.gmail.com",
@@ -221,3 +222,6 @@ TINYMCE_DEFAULT_CONFIG = {
 SUPABASE_URL = config('SUPABASE_URL')
 SUPABASE_KEY = config('SUPABASE_KEY')
 SUPABASE_BUCKET = config('SUPABASE_BUCKET')
+
+# Google Maps API Key
+GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')

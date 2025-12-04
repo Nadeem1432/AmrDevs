@@ -5,7 +5,6 @@ Contact Us | AmrDevs
 {% endblock %}
 {% load static %}
 {% block body %}
-        <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="bg-breadcrumb-single"></div>
             <div class="container text-center py-5" style="max-width: 900px;">
@@ -16,9 +15,6 @@ Contact Us | AmrDevs
                 </ol>    
             </div>
         </div>
-        <!-- Header End -->
-
-        <!-- Contact Start -->
         <div class="container-fluid contact bg-light py-5">
             <div class="container py-5">
                 <div class="row g-5">
@@ -27,12 +23,12 @@ Contact Us | AmrDevs
                             <div class="pb-5">
                                 <h4 class="text-primary">Contact Us</h4>
                                 <h1 class="display-4 mb-4">Get In Touch With Us</h1>
-                                <p class="mb-0">The contact form is currently inactive. Get a functional and working contact form with Ajax & PHP in a few minutes. Just copy and paste the files, add a little code and you're done. <a class="text-primary fw-bold" href="https://htmlcodex.com/contact-form">Download Now</a>.</p>
+                                <p class="mb-0">Ready to start your next project or discuss your digital strategy? Whether you have a complex development challenge or need advice on future-proofing your applications with AI or Web3, our team is here to listen. Reach out to schedule a consultation, and let's engineer success together.</p>
                             </div>
                             <div class="d-flex align-items-center mb-4">
                                 <div class="bg-primary btn-lg-square rounded-circle p-4"><i class="fa fa-home text-white"></i></div>
                                 <div class="ms-4">
-                                    <h4>Addresse</h4>
+                                    <h4>Address</h4>
                                     <p class="mb-0">{{config.address|default:"Add address"}}</p>
                                 </div>
                             </div>
@@ -98,25 +94,79 @@ Contact Us | AmrDevs
                             </div>
                         </form>
                     </div>
+
                     <div class="col-12 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="rounded h-100">
-                            <iframe class="rounded-top w-100" 
-                            style="height: 500px; margin-bottom: -6px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d387191.33750346623!2d-73.97968099999999!3d40.6974881!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c24fa5d33f083b%3A0xc80b8f06e177fe62!2sNew%20York%2C%20NY%2C%20USA!5e0!3m2!1sen!2sbd!4v1694259649153!5m2!1sen!2sbd" 
-                            loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+                            <div id="map-canvas" class="rounded-top w-100" style="height: 500px; margin-bottom: -6px;"></div>
+                                
                             <div class="d-flex align-items-center justify-content-center bg-primary rounded-bottom p-4">
                                 <div class="d-flex">
-                                    <a class="btn btn-dark btn-lg-square rounded-circle me-2" href="{{config.facebook}}"><i class="fab fa-facebook-f"></i></a>
-                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="{{config.twitter}}"><i class="fab fa-twitter"></i></a>
-                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="{{config.instagram}}"><i class="fab fa-instagram"></i></a>
-                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="{{config.linkedin}}"><i class="fab fa-linkedin-in"></i></a>
+                                    <a class="btn btn-dark btn-lg-square rounded-circle me-2" href="https://www.facebook.com/AmrDevs" target="_blank"><i class="fab fa-facebook-f"></i></a>
+                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="https://www.twitter.com/AmrDevs" target="_blank"><i class="fab fa-twitter"></i></a>
+                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="https://www.instagram.com/AmrDevs" target="_blank"><i class="fab fa-instagram"></i></a>
+                                    <a class="btn btn-dark btn-lg-square rounded-circle mx-2" href="https://www.linkedin.com/company/AmrDevs" target="_blank"><i class="fab fa-linkedin-in"></i></a>
                                 </div>
                             </div>
                         </div>
+                    </div>                    
                     </div>
-                </div>
             </div>
         </div>
-        <!-- Contact End -->
+        {% endblock %} 
+
+{% block extra_scripts %}
+
+<script>
+    // --- GOOGLE MAPS JAVASCRIPT ---
+    
+    function initMap() {
+        // 1. Define AmrDevs Company Location (Near Qadri Masjid, Amroha)
+        const amroha = { lat: 28.9095, lng: 78.4586 }; 
+
+        // 2. Initialize Map centered on AmrDevs
+        const map = new google.maps.Map(document.getElementById("map-canvas"), {
+            zoom: 12,
+            center: amroha,
+        });
+
+        // 3. Add AmrDevs Marker (Red/Company Color)
+        new google.maps.Marker({
+            position: amroha,
+            map: map,
+            title: "AmrDevs Location",
+            // Using a specific color icon to represent the company
+            icon: 'http://maps.google.com/mapfiles/ms/icons/red-dot.png' 
+        });
+
+        // 4. Check for User's Geolocation Permission (Dynamic Client Location)
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(
+                (position) => {
+                    const userLocation = {
+                        lat: position.coords.latitude,
+                        lng: position.coords.longitude,
+                    };
+                    
+                    // Add User/Client Marker ONLY IF permission is granted (Blue/User Color)
+                    new google.maps.Marker({
+                        position: userLocation,
+                        map: map,
+                        title: "Your Current Location",
+                        icon: 'http://maps.google.com/mapfiles/ms/icons/blue-dot.png'
+                    });
+
+                    // Option: Set map bounds to fit both markers here if desired.
+                },
+                () => {
+                    // User denied location access. Map remains centered on AmrDevs.
+                    console.log("User denied location access.");
+                }
+            );
+        }
+    }
+</script>
+
+<script async defer src="https://maps.googleapis.com/maps/api/js?key={{GOOGLE_MAPS_API_KEY}}&callback=initMap"></script>
 
 {% endblock %}
 <script>

@@ -45,7 +45,8 @@ def contact(request):
     lates_two_blogs = Blog.objects.filter(status=True).only('title').order_by('-id')[:3]
     context = {
         'config': config_data,
-        'posts': lates_two_blogs
+        'posts': lates_two_blogs,
+        'GOOGLE_MAPS_API_KEY': settings.GOOGLE_MAPS_API_KEY,
     }
     if request.method == 'POST':
         try:
@@ -58,22 +59,6 @@ def contact(request):
                 # mail for us
                 full_detail =" \n\n"+  message + " \n\n\n\n" +  "Name: "+ name +" \n"+    "Email: "+ email +" \n"+    "Phone: "+ phone+  " \n"+  "Query: "+ sender_subject
 
-
-
-                # send_mail('Amrohvi Developers',     #subject
-                #                 full_detail, #message
-                #                 settings.EMAIL_HOST_USER, #sender_email
-                #                 ['nadeemali2502@gmail.com'],  #receiver_email
-                #                 fail_silently=False)
-                # # mail for user
-                # subject      = "Thank you for contact"
-                # user_message = "Hi "+name+",Thank you for contact us! our team will get back to you soon."
-                # send_mail(subject,
-                #                 user_message,
-                #                 settings.EMAIL_HOST_USER,
-                #                 [email],
-                #                 fail_silently=False)
-                # context.update({'popup':"submitted",'message':f'Thank you {name}'})
                 body = full_detail
                 provider_settings = settings.EMAIL_PROVIDERS.get("amrdevs")
                 connection = get_connection(
@@ -88,7 +73,7 @@ def contact(request):
                     subject='Amrohvi Developers',
                     body=body,
                     from_email=provider_settings["USER"],
-                    to=['nadeemali2502@gmail.com'],
+                    to=[provider_settings["Receiver_EMAIL"]],
                     connection=connection,
                 )
                 mail.send()

@@ -243,7 +243,7 @@
                         <span class="text-body"><a href="{% url 'index' %}" class="border-bottom text-primary"><i class="fas fa-copyright text-light me-2">{% now "Y" %}</i>{{config.short_title|default:"Your Site Name"}}</a>, All right reserved.</span>
                     </div>
                     <div class="col-md-6 text-center text-md-end text-body">
-                        Developer- <a class="border-bottom text-primary" href="{{config.linkedin}}"> {% if config.created_by %} {{ config.created_by.first_name|add:" " }}{{ config.created_by.last_name }} {% else %} {{config.short_title}}  {% endif %} </a>
+                        Developer- <a class="border-bottom text-primary" {% if config.linkedin  %} href="{{config.linkedin}} {% endif %}"> {% if config.created_by %} {{ config.created_by.first_name|add:" " }}{{ config.created_by.last_name }} {% else %} {{config.short_title}}  {% endif %} </a>
                     </div>
                 </div>
             </div>
@@ -275,7 +275,9 @@
             swal("Error", "Something went wrong", "error");
         {% endif %}
     </script>
+{% block extra_scripts %}
 
+{% endblock %}
     </body>
 
 </html>
