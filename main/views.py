@@ -70,7 +70,7 @@ def contact(request):
                             )
 
                 mail = EmailMessage(
-                    subject='Amrohvi Developers',
+                    subject='AmrDevs| Query Submission',
                     body=body,
                     from_email=provider_settings["USER"],
                     to=[provider_settings["Receiver_EMAIL"]],
