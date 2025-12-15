@@ -28,7 +28,6 @@ from main.sitemaps import StaticViewSitemap
 # A dictionary mapping a key (e.g., 'static') to the sitemap class
 sitemaps = {
     'static': StaticViewSitemap,
-    # Add other sitemaps here if you create them (e.g., 'jobs': JobSitemap)
 }
 
 
