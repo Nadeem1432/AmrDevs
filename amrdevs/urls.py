@@ -19,21 +19,21 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-# # --- SITEMAP IMPORTS ---
-# from django.contrib.sitemaps.views import sitemap
-# # Import your sitemap class (adjust the import path if sitemaps.py is elsewhere)
-# from main.sitemaps import StaticViewSitemap 
+# --- SITEMAP IMPORTS ---
+from django.contrib.sitemaps.views import sitemap
+# Import your sitemap class (adjust the import path if sitemaps.py is elsewhere)
+from main.sitemaps import StaticViewSitemap 
 
-# # --- SITEMAP DEFINITION ---
-# # A dictionary mapping a key (e.g., 'static') to the sitemap class
-# sitemaps = {
-#     'static': StaticViewSitemap,
-# }
+# --- SITEMAP DEFINITION ---
+# A dictionary mapping a key (e.g., 'static') to the sitemap class
+sitemaps = {
+    'static': StaticViewSitemap,
+}
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
+    path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('', include('main.urls')),
     path('panel/', include('panel.urls')),
     path('job-portal/', include('jobportal.urls')),
