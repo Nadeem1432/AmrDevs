@@ -365,3 +365,9 @@ class FAQ(GeneralFieldsMixin):
 
     def __str__(self):
         return self.question
+    
+class JSONImport(models.Model):
+    class Meta:
+        verbose_name = "JSON Data Importer"
+        verbose_name_plural = "JSON Data Importer"
+        managed = False  # No database table will be created

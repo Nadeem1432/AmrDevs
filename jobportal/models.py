@@ -65,3 +65,15 @@ class EmailTemplate(models.Model):
 
     def __str__(self):
         return self.subject
+
+class BulkJobAppliedLog(models.Model):
+    applied_at = models.DateTimeField(auto_now_add=True)
+    total_applications = models.PositiveIntegerField(null=True, blank=True)
+    successful_applications = models.PositiveIntegerField(null=True, blank=True)
+    failed_applications = models.PositiveIntegerField(null=True, blank=True)
+    all_recievers = models.JSONField(null=True, blank=True, default=dict)
+    sender_email = models.EmailField(max_length=254, null=True, blank=True)
+    job_id = models.CharField(max_length=100, unique=True, null=True)
+    is_completed = models.BooleanField(default=False)
+    def __str__(self):
+        return f"Bulk Application on {self.applied_at.strftime('%Y-%m-%d %H:%M:%S')}"

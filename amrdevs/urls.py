@@ -23,6 +23,7 @@ from django.conf.urls.static import static
 from django.contrib.sitemaps.views import sitemap
 # Import your sitemap class (adjust the import path if sitemaps.py is elsewhere)
 from main.sitemaps import StaticViewSitemap 
+from main.views import json_data_loader_view  # <-- IMPORT THE VIEW HERE
 
 # --- SITEMAP DEFINITION ---
 # A dictionary mapping a key (e.g., 'static') to the sitemap class
@@ -32,6 +33,7 @@ sitemaps = {
 
 
 urlpatterns = [
+    path('admin/data-loader/', json_data_loader_view, name='json_data_loader'), # <-- ADD THIS LINE
     path('admin/', admin.site.urls),
     path('sitemap.xml', sitemap, {'sitemaps': sitemaps}, name='django.contrib.sitemaps.views.sitemap'),
     path('', include('main.urls')),

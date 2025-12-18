@@ -1,7 +1,14 @@
-from django.shortcuts import render, HttpResponse
+from django.shortcuts import render, redirect
 from .models import *
 from django.core.mail import send_mail, get_connection, EmailMessage
 from django.conf import settings
+from django.contrib.admin.views.decorators import staff_member_required
+from django.core.serializers import deserialize
+from django.db import IntegrityError
+from django.contrib import messages
+from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ObjectDoesNotExist
+from .forms import JsonUploadForm
 
 # Create your views here.
 
@@ -138,3 +145,56 @@ def handler(request):
     call_command('makemigrations')
     result = call_command('migrate')
     return JsonResponse({"status": "migrations applied", "result": str(result)})
+
+
+@staff_member_required
+def json_data_loader_view(request):
+    """Custom view to handle JSON file upload and deserialization with error skipping."""
+    
+    if request.method == 'POST':
+        form = JsonUploadForm(request.POST, request.FILES)
+        if form.is_valid():
+            uploaded_file = request.FILES['json_file']
+            
+            # Read the file content into memory
+            try:
+                # Use BytesIO to handle the file content
+                file_content = uploaded_file.read()
+                # Assuming the file is UTF-8 encoded
+                objects = list(deserialize('json', file_content.decode('utf-8')))
+            except Exception as e:
+                messages.error(request, f"Error reading or deserializing file: {e}")
+                return render(request, 'admin/json_loader_form.html', {'form': form, 'title': 'JSON Data Loader'})
+
+            skipped_duplicates = 0
+            skipped_missing_related = 0
+            saved = 0
+            
+            # --- CORE LOGIC FROM YOUR MANAGEMENT COMMAND ---
+            for obj in objects:
+                try:
+                    obj.save()
+                    saved += 1
+                except IntegrityError:
+                    skipped_duplicates += 1
+                except (ContentType.DoesNotExist, ObjectDoesNotExist) as e:
+                    skipped_missing_related += 1
+                except Exception as e:
+                    messages.warning(request, f"Unexpected error for {obj.object.__class__.__name__}: {e}")
+            # --- END CORE LOGIC ---
+            
+            # Display results to the user
+            messages.success(request, 
+                f"Data Load Complete. Saved: {saved}, Skipped duplicates: {skipped_duplicates}, Skipped missing relations: {skipped_missing_related}."
+            )
+            # Redirect to GET to prevent form resubmission
+            return redirect('json_data_loader')
+
+    else:
+        form = JsonUploadForm()
+
+    return render(request, 'admin/json_loader_form.html', {
+        'form': form,
+        'title': 'JSON Data Loader',
+        'site_header': 'AmrDevs Admin' # Optional: Customize admin header
+    })
