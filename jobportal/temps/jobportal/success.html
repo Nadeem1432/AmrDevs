@@ -1,4 +1,5 @@
 <!doctype html>
+{% load static %}
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -119,7 +120,7 @@
         }
 
         // 5. Alert sound or notification
-        const alertSound = new Audio('https://www.soundjay.com/button/beep-07.wav');
+        const alertSound = new Audio("{% static 'sounds/notification.mp3' %}");
         alertSound.play().catch(() => {
             console.error("Audio playback failed. Please check the file URL.");
         });
