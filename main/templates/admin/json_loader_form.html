@@ -1,0 +1,31 @@
+{% extends "admin/base_site.html" %}
+{% load i18n static %}
+
+{% block breadcrumbs %}
+<div class="breadcrumbs">
+<a href="{% url 'admin:index' %}">{% translate 'Home' %}</a>
+&rsaquo; JSON Data Importer
+</div>
+{% endblock %}
+
+{% block content %}
+<div id="content-main">
+    <div class="module" style="padding: 20px;">
+        <form action="." method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            <div>
+                <h2 style="margin-bottom: 20px;">📤 Upload Backup Data</h2>
+                <p>Select a JSON fixture file to migrate data into the current database. <strong>Existing records will be skipped.</strong></p>
+                
+                <div style="margin: 20px 0;">
+                    {{ form.json_file }}
+                </div>
+                
+                <div class="submit-row" style="text-align: left; padding-left: 0;">
+                    <input type="submit" value="Start Migration" class="default" style="float: none;">
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

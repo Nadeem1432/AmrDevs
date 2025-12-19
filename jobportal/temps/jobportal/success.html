@@ -1,5 +1,5 @@
-{% comment %} <!doctype html>
 {% load static %}
+{% comment %} <!doctype html>
 <html lang="en">
 <head>
   <meta charset="utf-8">
@@ -294,7 +294,10 @@
 
         // Play Completion Sound
         try {
-            new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3').play();
+          const alertSound = new Audio("{% static 'sounds/notification.mp3' %}");
+          alertSound.play().catch(() => {
+              console.error("Audio playback failed. Please check the file URL.");
+          });
         } catch (e) {
             console.log("Audio play blocked by browser.");
         }

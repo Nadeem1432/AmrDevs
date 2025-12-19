@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+
+{% block branding %}
+  <h1 id="site-name"><a href="{% url 'admin:index' %}">AmrDevs Administration</a></h1>
+{% endblock %}
+
+{% block nav-global %}
+  <section>
+    <a href="{% url 'json_data_loader' %}" class="button" style="background: #417690; color: white; padding: 5px 10px; border-radius: 4px; text-decoration: none; font-weight: bold;">
+        📤 Import JSON Data
+    </a>
+  </section>
+  {{ block.super }}
+{% endblock %}
