@@ -1,4 +1,4 @@
-<!doctype html>
+{% comment %} <!doctype html>
 {% load static %}
 <html lang="en">
 <head>
@@ -125,6 +125,179 @@
             console.error("Audio playback failed. Please check the file URL.");
         });
         
+    }
+  </script>
+</body>
+</html> {% endcomment %}
+
+
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Mail Status | AmrDevs</title>
+  <style>
+    body { font-family: Arial, sans-serif; color: #222; line-height: 1.6; background: #f9f9f9; padding: 20px; }
+    .container { max-width: 720px; margin: 0 auto; background: #fff; border: 1px solid #e6e6e6; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .header { background: #1976d2; color: #fff; padding: 14px 20px; font-size: 20px; font-weight: bold; }
+    .content { padding: 20px; }
+    .success-message { padding: 14px; background: #e8f5e9; border-left: 4px solid #4caf50; border-radius: 4px; margin-bottom: 16px; }
+    .section { margin-bottom: 20px; }
+    .section h4 { margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 4px; }
+    ul { list-style-type: disc; margin: 0 0 0 20px; padding: 0; }
+    li { margin: 4px 0; }
+    .failed { background: #fdecea; border-left: 4px solid #f44336; padding: 12px; border-radius: 4px; }
+    .footer { text-align: center; padding: 14px; background: #fafafa; font-size: 13px; color: #777; border-top: 1px solid #eee; }
+
+    /* Progress & Summary Styles */
+    .progress-wrapper { margin: 20px 0; padding: 15px; background: #f0f7ff; border-radius: 6px; border: 1px solid #d1e3f5; }
+    .bar-container { width: 100%; background: #e0e0e0; height: 12px; border-radius: 10px; overflow: hidden; margin: 10px 0; }
+    .bar-fill { width: 0%; height: 100%; background: #2196f3; transition: width 0.5s ease; }
+    .ticker { font-size: 12px; color: #555; font-style: italic; }
+    
+    .summary-box { 
+        background: #f8f9fa; 
+        border: 1px solid #ddd; 
+        padding: 15px; 
+        border-radius: 6px; 
+        margin-bottom: 20px; 
+        display: flex; 
+        justify-content: space-around; 
+        text-align: center;
+    }
+    .summary-item .label { font-size: 11px; color: #777; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 5px; }
+    .summary-item .value { font-size: 20px; font-weight: bold; }
+    
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="header">Email Status</div>
+    <div class="content">
+      
+      <div id="progress-box" class="progress-wrapper">
+        <div style="display: flex; justify-content: space-between; font-weight: bold; font-size: 14px;">
+            <span id="progress-label">Preparing...</span>
+            <span id="progress-pc">0%</span>
+        </div>
+        <div class="bar-container"><div id="bar" class="bar-fill"></div></div>
+        <div id="ticker" class="ticker">Connecting to SMTP server...</div>
+      </div>
+
+      <div id="final-msg" class="success-message hidden">
+          ✅ <strong>Success!</strong> All emails in this batch have been processed.
+      </div>
+
+      <div id="summary-dashboard" class="summary-box hidden">
+          <div class="summary-item">
+              <div class="label">Sent</div>
+              <div id="sum-success" class="value" style="color: #28a745;">0</div>
+          </div>
+          <div class="summary-item">
+              <div class="label">Failed</div>
+              <div id="sum-failed" class="value" style="color: #dc3545;">0</div>
+          </div>
+          <div class="summary-item">
+              <div class="label">Time Taken</div>
+              <div id="sum-time" class="value" style="color: #1976d2;">0s</div>
+          </div>
+      </div>
+
+      <div class="section">
+        {{ send_another_mail|safe }}
+      </div>
+
+      <div id="success-sec" class="section hidden">
+        <h4>✅ Successfully Sent To:</h4>
+        <ul id="success-list"></ul>
+      </div>
+
+      <div id="failed-sec" class="section failed hidden">
+        <h4>❌ Failed To Send:</h4>
+        <ul id="failed-list"></ul>
+      </div>
+    </div>
+
+    <div class="footer">
+      <p>&copy; 2025 AmrDevs Job Portal — All rights reserved.</p>
+    </div>
+  </div>
+
+  <script>
+    const jobId = "{{ job_id }}";
+    
+    // START FRONTEND TIMER
+    const startTime = Date.now();
+
+    const checkInterval = setInterval(() => {
+        fetch(`/job-portal/check-status/${jobId}/`)
+            .then(res => res.json())
+            .then(data => {
+                // Update Progress Bar UI
+                document.getElementById('bar').style.width = data.progress_percent + "%";
+                document.getElementById('progress-pc').innerText = data.progress_percent + "%";
+                
+                if (!data.is_completed) {
+                    document.getElementById('progress-label').innerText = `Sending ${data.current_index} of ${data.total_count}`;
+                    document.getElementById('ticker').innerText = `Processing: ${data.last_email || '...'}`;
+                } else {
+                    // STOP POLLING
+                    clearInterval(checkInterval);
+                    
+                    // CALCULATE DURATION
+                    const endTime = Date.now();
+                    const diffInSeconds = Math.floor((endTime - startTime) / 1000);
+                    const minutes = Math.floor(diffInSeconds / 60);
+                    const seconds = diffInSeconds % 60;
+                    const durationText = minutes > 0 ? `${minutes}m ${seconds}s` : `${seconds}s`;
+
+                    renderFinalResults(data, durationText);
+                }
+            })
+            .catch(err => console.error("Status Check Error:", err));
+    }, 2000);
+
+    function renderFinalResults(data, duration) {
+        // Hide Loader, Show Completion
+        document.getElementById('progress-box').style.display = 'none';
+        document.getElementById('final-msg').classList.remove('hidden');
+
+        // Populate Summary
+        document.getElementById('sum-success').innerText = data.results.success.length;
+        document.getElementById('sum-failed').innerText = data.results.failed.length;
+        document.getElementById('sum-time').innerText = duration;
+        document.getElementById('summary-dashboard').classList.remove('hidden');
+
+        // Render Success List
+        if (data.results.success.length > 0) {
+            const list = document.getElementById('success-list');
+            data.results.success.forEach(email => {
+                let li = document.createElement('li');
+                li.textContent = email;
+                list.appendChild(li);
+            });
+            document.getElementById('success-sec').classList.remove('hidden');
+        }
+
+        // Render Failure List
+        if (data.results.failed.length > 0) {
+            const list = document.getElementById('failed-list');
+            data.results.failed.forEach(email => {
+                let li = document.createElement('li');
+                li.textContent = email;
+                list.appendChild(li);
+            });
+            document.getElementById('failed-sec').classList.remove('hidden');
+        }
+
+        // Play Completion Sound
+        try {
+            new Audio('https://www.soundjay.com/buttons/sounds/button-09.mp3').play();
+        } catch (e) {
+            console.log("Audio play blocked by browser.");
+        }
     }
   </script>
 </body>

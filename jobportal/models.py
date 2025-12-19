@@ -73,7 +73,11 @@ class BulkJobAppliedLog(models.Model):
     failed_applications = models.PositiveIntegerField(null=True, blank=True)
     all_recievers = models.JSONField(null=True, blank=True, default=dict)
     sender_email = models.EmailField(max_length=254, null=True, blank=True)
+    # Tracking Fields
     job_id = models.CharField(max_length=100, unique=True, null=True)
     is_completed = models.BooleanField(default=False)
+    current_index = models.IntegerField(default=0)
+    last_processed_email = models.EmailField(null=True, blank=True)
+
     def __str__(self):
         return f"Bulk Application on {self.applied_at.strftime('%Y-%m-%d %H:%M:%S')}"

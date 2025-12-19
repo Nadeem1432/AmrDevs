@@ -218,54 +218,52 @@ import uuid
 @login_required(login_url='/')
 def send_mail(request):
     if request.method == 'POST':
-        # ... [Keep your form data extraction here] ...
         subject = request.POST.get('subject', '').strip()
         cover_letter = request.POST.get('cover_letter', '').strip()
         recipients_raw = request.POST.get('recipients', '')
         recipients = list(set([r.strip() for r in recipients_raw.split(',') if r.strip()]))
 
-        # Handle Files
         uploaded_file = request.FILES.get('resume_file')
         selected_resume_id = request.POST.get('resume_select')
+        
         resume_path = None
+        original_filename = "Resume.pdf"
         is_temp_file = False
 
+        # Determine file path AND original clean name
         if uploaded_file:
-            # Save uploaded file to disk temporarily (InMemory files disappear after request)
-            filename = f"tmp_{uuid.uuid4()}_{uploaded_file.name}"
+            original_filename = uploaded_file.name
+            filename = f"tmp_{uuid.uuid4()}_{original_filename}"
             saved_path = default_storage.save(f'temp_resumes/{filename}', ContentFile(uploaded_file.read()))
             resume_path = os.path.join(settings.MEDIA_ROOT, saved_path)
             is_temp_file = True
         elif selected_resume_id:
-            resume_path = Resume.objects.get(pk=selected_resume_id).file.path
+            res_obj = Resume.objects.get(pk=selected_resume_id)
+            resume_path = res_obj.file.path
+            original_filename = os.path.basename(res_obj.file.name)
         else:
-            last_res = Resume.objects.last()
-            resume_path = last_res.file.path if last_res else None
+            res_obj = Resume.objects.last()
+            if res_obj:
+                resume_path = res_obj.file.path
+                original_filename = os.path.basename(res_obj.file.name)
 
-        # Create Pending Log
         job_id = str(uuid.uuid4())
         provider_settings = settings.EMAIL_PROVIDERS.get("jobportal", {})
-        sender_email = provider_settings["USER"]
         
-        BulkJobAppliedLog.objects.create(
-            job_id=job_id,
-            total_applications=len(recipients),
-            successful_applications=0,
-            failed_applications=0,
-            all_recievers=[],
-            sender_email=sender_email
-        )
+        BulkJobAppliedLog.objects.create(job_id=job_id, total_applications=len(recipients), sender_email=provider_settings["USER"])
 
-        # Start Thread
         thread = threading.Thread(
             target=background_email_task,
-            args=(job_id, subject, cover_letter, recipients, sender_email, resume_path, is_temp_file, provider_settings)
+            args=(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
         )
         thread.start()
 
-        return render(request, 'jobportal/success.html', {'job_id': job_id, 'count': len(recipients)})
+        return render(request, 'jobportal/success.html', {
+            'job_id': job_id, 
+            'count': len(recipients),
+            'send_another_mail': f'<a href="{reverse("send_mail")}">Send another batch</a>'
+        })
 
-    # GET Request logic
     context = {
         'resumes': list(Resume.objects.filter(status=True).values('name','id')),
         'subjects': list(EmailTemplate.objects.all().values('subject','body','id'))
@@ -275,17 +273,17 @@ def send_mail(request):
 def check_job_status(request, job_id):
     try:
         log = BulkJobAppliedLog.objects.get(job_id=job_id)
-        
-        # Prepare the list of emails from the JSON log field
-        success_list = [entry['email'] for entry in log.all_recievers if entry['status'] == 'Sent']
-        failed_list = [entry['email'] for entry in log.all_recievers if 'Failed' in entry['status']]
-        
+        progress = int((log.current_index / log.total_applications) * 100) if log.total_applications > 0 else 0
         return JsonResponse({
             'is_completed': log.is_completed,
+            'current_index': log.current_index,
+            'total_count': log.total_applications,
+            'last_email': log.last_processed_email,
+            'progress_percent': progress,
             'results': {
-                'success': success_list,
-                'failed': failed_list
+                'success': [e['email'] for e in log.all_recievers if e['status'] == 'Sent'],
+                'failed': [e['email'] for e in log.all_recievers if 'Failed' in e['status']]
             }
         })
     except BulkJobAppliedLog.DoesNotExist:
-        return JsonResponse({'error': 'Job not found'}, status=404)
+        return JsonResponse({'error': 'Not Found'}, status=404)

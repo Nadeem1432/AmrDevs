@@ -1,6 +1,7 @@
 from supabase import create_client
 from django.conf import settings
 import os
+import time
 from urllib.parse import unquote
 from supabase import StorageException
 
@@ -153,14 +154,71 @@ from django.db import connection as db_connection
 
 
 
-def background_email_task(job_id, subject, cover_letter, recipients, sender_email, resume_path, is_temp_file, provider_settings):
-    """Function to run in a separate thread."""
-    success_recipients = []
-    failed_recipients = []
-    delivered_status = []
+# def background_email_task(job_id, subject, cover_letter, recipients, sender_email, resume_path, is_temp_file, provider_settings):
+#     """Function to run in a separate thread."""
+#     success_recipients = []
+#     failed_recipients = []
+#     delivered_status = []
+
+#     try:
+#         # 1. Setup Connection
+#         connection = get_connection(
+#             host=provider_settings["HOST"],
+#             port=provider_settings["PORT"],
+#             username=provider_settings["USER"],
+#             password=provider_settings["PASSWORD"],
+#             use_tls=provider_settings["USE_TLS"],
+#         )
+#         from_email = f"Job Application <{sender_email}>"
+
+#         # 2. Loop through recipients
+#         for recipient in recipients:
+#             text_content = strip_tags(cover_letter) if cover_letter else ''
+#             html_content = cover_letter or ''
+
+#             email = EmailMultiAlternatives(
+#                 subject, text_content, from_email, [recipient], connection=connection
+#             )
+#             email.attach_alternative(html_content, "text/html")
+
+#             # Attach resume if path exists
+#             if resume_path and os.path.exists(resume_path):
+#                 email.attach_file(resume_path)
+
+#             try:
+#                 if email.send(fail_silently=False):
+#                     delivered_status.append({'email': recipient, 'status': 'Sent'})
+#                     success_recipients.append(recipient)
+#                 else:
+#                     raise Exception("SMTP Fail")
+#             except Exception as e:
+#                 delivered_status.append({'email': recipient, 'status': f'Failed: {str(e)}'})
+#                 failed_recipients.append(recipient)
+
+#         # 3. Update Log
+#         log = BulkJobAppliedLog.objects.get(job_id=job_id)
+#         log.successful_applications = len(success_recipients)
+#         log.failed_applications = len(failed_recipients)
+#         log.all_recievers = delivered_status
+#         log.is_completed = True
+#         log.save()
+
+#     finally:
+#         # 4. Cleanup: Delete temp file if it was a manual upload
+#         if is_temp_file and resume_path and os.path.exists(resume_path):
+#             os.remove(resume_path)
+#         # Close DB connection in thread to prevent leaks
+#         db_connection.close()
+
+import mimetypes
+
+def background_email_task(job_id, subject, cover_letter, recipients, sender_email, resume_path, original_filename, is_temp_file, provider_settings):
+    """Processes emails and attaches files using the original display name."""
+    success_count = 0
+    failed_count = 0
+    results_list = []
 
     try:
-        # 1. Setup Connection
         connection = get_connection(
             host=provider_settings["HOST"],
             port=provider_settings["PORT"],
@@ -169,42 +227,51 @@ def background_email_task(job_id, subject, cover_letter, recipients, sender_emai
             use_tls=provider_settings["USE_TLS"],
         )
         from_email = f"Job Application <{sender_email}>"
+        log = BulkJobAppliedLog.objects.get(job_id=job_id)
 
-        # 2. Loop through recipients
-        for recipient in recipients:
-            text_content = strip_tags(cover_letter) if cover_letter else ''
-            html_content = cover_letter or ''
+        # Pre-read file bytes to keep the clean name during attachment
+        file_data = None
+        content_type = 'application/octet-stream'
+        if resume_path and os.path.exists(resume_path):
+            with open(resume_path, 'rb') as f:
+                file_data = f.read()
+            content_type, _ = mimetypes.guess_type(resume_path)
+            content_type = content_type or 'application/octet-stream'
 
-            email = EmailMultiAlternatives(
-                subject, text_content, from_email, [recipient], connection=connection
-            )
-            email.attach_alternative(html_content, "text/html")
+        for index, recipient in enumerate(recipients, start=1):
+            log.last_processed_email = recipient
+            log.save()
 
-            # Attach resume if path exists
-            if resume_path and os.path.exists(resume_path):
-                email.attach_file(resume_path)
+            text_content = strip_tags(cover_letter)
+            email = EmailMultiAlternatives(subject, text_content, from_email, [recipient], connection=connection)
+            email.attach_alternative(cover_letter or '', "text/html")
+
+            # ATTACHMENT LOGIC: Restoring the clean filename
+            if file_data:
+                email.attach(original_filename, file_data, content_type)
 
             try:
-                if email.send(fail_silently=False):
-                    delivered_status.append({'email': recipient, 'status': 'Sent'})
-                    success_recipients.append(recipient)
-                else:
-                    raise Exception("SMTP Fail")
+                res = email.send(fail_silently=False)
+                status = 'Sent' if res else 'Failed'
+                if res: success_count += 1 
+                else: failed_count += 1
             except Exception as e:
-                delivered_status.append({'email': recipient, 'status': f'Failed: {str(e)}'})
-                failed_recipients.append(recipient)
+                status = f'Failed: {str(e)}'
+                failed_count += 1
 
-        # 3. Update Log
-        log = BulkJobAppliedLog.objects.get(job_id=job_id)
-        log.successful_applications = len(success_recipients)
-        log.failed_applications = len(failed_recipients)
-        log.all_recievers = delivered_status
+            results_list.append({'email': recipient, 'status': status})
+            log.current_index = index
+            log.all_recievers = results_list
+            log.successful_applications = success_count
+            log.failed_applications = failed_count
+            log.save()
+            time.sleep(1)
+
         log.is_completed = True
         log.save()
 
     finally:
-        # 4. Cleanup: Delete temp file if it was a manual upload
+        # Cleanup temporary files
         if is_temp_file and resume_path and os.path.exists(resume_path):
             os.remove(resume_path)
-        # Close DB connection in thread to prevent leaks
         db_connection.close()
