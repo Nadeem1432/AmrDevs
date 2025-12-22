@@ -1,36 +1,43 @@
 {% extends 'main/base.html' %}
 
 {% block title %}
-Our Services  | AmrDevs
+IT Services & Software Solutions | AmrDevs | Web, Mobile & AI
 {% endblock %}
-{% load static%}
+
+{% block meta_description %}
+Explore the professional IT services at AmrDevs. We offer custom web development, high-performance mobile apps, AI/ML integration, and expert SEO consulting to grow your business.
+{% endblock %}
+
+{% block meta_keywords %}
+IT Services Amroha, Custom Web Development, Mobile App Development, Android & iOS Solutions, AI & Machine Learning Integration, SEO Consulting Uttar Pradesh, Digital Transformation, AmrDevs IT Solutions, Software Development Company in Amroha, Best Web Developers in Amroha, IT Services in Amroha, Website Designing Amroha, Mobile App Development Amroha, Top Tech Agency Amroha, Software Solutions Uttar Pradesh, Digital Transformation Amroha, AmrDevs Amroha Office, Custom Software Amroha, Local IT Experts Uttar Pradesh, Amroha Software Startup, Best IT Company in Moradabad Division, Software Agency near Amroha Railway Station, Tech Support Services Amroha, Full-stack Web Development, Custom Website Building, Django Web Development Services, React.js Developers India, Responsive Web Design, E-commerce Website Development, Progressive Web Apps (PWA), Corporate Website Design, API Integration Services, Web Portal Development, CMS Development Services, Front-end Development Agency, Back-end Engineering Solutions, Website Maintenance Services, High-performance Web Solutions, Android App Development, iOS App Development, Cross-platform Mobile Apps, Flutter App Development, React Native Developers, Mobile UI/UX Design, Custom Mobile Applications, Hybrid App Solutions, Enterprise Mobile Apps, Mobile App Consulting, App Store Optimization (ASO), Native Android Development, Mobile App Maintenance, MVP Development for Startups, Mobile Backend Development, AI Solutions for Business, Machine Learning Integration, Custom Chatbot Development, Predictive Analytics Tools, Natural Language Processing (NLP), AI-powered Automation, Data Science Consulting, Computer Vision Solutions, AI Model Training, Artificial Intelligence Startup India, Generative AI Development, Business Intelligence (BI) Tools, AI Software Engineering, Deep Learning Solutions, Automated Business Workflows, IT Consulting Services, Digital Strategy Consulting, Cloud Computing Solutions, Software Outsourcing India, Hire Dedicated Developers, Custom ERP Development, CRM Software Solutions, Software as a Service (SaaS) Development, Enterprise Software Engineering, Digital Product Design, Scalable Tech Solutions, Software Architecture Design, Product Management Services, Quality Assurance & Testing, Agile Development Agency, SEO Services for Small Business, Local SEO Experts Amroha, Search Engine Marketing (SEM), Technical SEO Audit, Keyword Research Services, On-page SEO Optimization, Content Marketing Strategy, Link Building Services, Organic Traffic Growth, Google Ranking Services, How to build a custom CRM for business, Best agency for AI automation in India, Cost of website development in Amroha, Professional software developers for hire, Transform business with AI solutions, Custom web application for startups, Secure cloud storage solutions for business, Reliable software partner in Uttar Pradesh, User-friendly mobile app design, Automate manual tasks with software, Modernizing legacy software systems, Custom database management solutions, Scalable web architecture for e-commerce, AmrDevs tech blog and insights, Innovative software engineering AmrDevs, Er. Nadeem Ali, Er Nadeem Ali Amrohvi, Nadeem Ali
+{% endblock %}
+
+{% load static %}
+
 {% block body %}
         
-
-        <!-- Header Start -->
         <div class="container-fluid bg-breadcrumb">
             <div class="bg-breadcrumb-single"></div>
             <div class="container text-center py-5" style="max-width: 900px;">
-                <h4 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Our Services</h4>
+                <h1 class="text-white display-4 mb-4 wow fadeInDown" data-wow-delay="0.1s">Our Professional IT Services</h1>
                 <ol class="breadcrumb justify-content-center mb-0 wow fadeInDown" data-wow-delay="0.3s">
                     <li class="breadcrumb-item"><a href="{% url 'index' %}">Home</a></li>
-                    <li class="breadcrumb-item active text-primary">Service</li>
+                    <li class="breadcrumb-item active text-primary">Services</li>
                 </ol>    
             </div>
         </div>
-        <!-- Header End -->
-
-        <!-- Dynamic Services Start -->
         {% include 'main/components/service_carousel.html' %}
-        <!--Dynamic Services End -->
-
-        <!-- Dynamic Reviews Start -->
-        {% include 'main/components/review_carousel.html' %}
-        <!-- Dynamic Reviews End -->
-
-        <!-- FAQ Start -->
-        {% include 'main/components/faq_content.html' %}
-        <!-- FAQ End -->
-
-{% endblock %}
-    
+        <div class="container-fluid py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+                <h2 class="text-primary">Client Testimonials</h2>
+                <p class="mb-0">See how AmrDevs has helped businesses transform with custom technology.</p>
+            </div>
+            {% include 'main/components/review_carousel.html' %}
+        </div>
+        <div class="container-fluid py-5">
+            <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
+                <h2 class="text-primary">Frequently Asked Questions</h2>
+            </div>
+            {% include 'main/components/faq_content.html' %}
+        </div>
+        {% endblock %}

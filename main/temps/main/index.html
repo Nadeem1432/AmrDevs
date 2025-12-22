@@ -3,39 +3,43 @@
 {% block title %}
 AmrDevs
 {% endblock %}
-{% load static%}
+
+{% block meta_description %}
+AmrDevs is a premier IT agency in Amroha, specializing in custom software development, mobile apps, and AI/ML solutions. We build high-performance tools for business growth.
+{% endblock %}
+
+{% block meta_keywords %}
+Software Development Amroha, Web Design Uttar Pradesh, Mobile App Developers India, AI ML Startup, AmrDevs Portfolio, Custom CRM Developers, AmrDevs Amroha, Software Development Company in Amroha, Best Web Developers in Amroha, IT Services in Amroha, Website Designing Amroha, Mobile App Development Amroha, Top Tech Agency Amroha, Software Solutions Uttar Pradesh, Digital Transformation Amroha, AmrDevs Amroha Office, Custom Software Amroha, Local IT Experts Uttar Pradesh, Amroha Software Startup, Best IT Company in Moradabad Division, Software Agency near Amroha Railway Station, Tech Support Services Amroha, Full-stack Web Development, Custom Website Building, Django Web Development Services, React.js Developers India, Responsive Web Design, E-commerce Website Development, Progressive Web Apps (PWA), Corporate Website Design, API Integration Services, Web Portal Development, CMS Development Services, Front-end Development Agency, Back-end Engineering Solutions, Website Maintenance Services, High-performance Web Solutions, Android App Development, iOS App Development, Cross-platform Mobile Apps, Flutter App Development, React Native Developers, Mobile UI/UX Design, Custom Mobile Applications, Hybrid App Solutions, Enterprise Mobile Apps, Mobile App Consulting, App Store Optimization (ASO), Native Android Development, Mobile App Maintenance, MVP Development for Startups, Mobile Backend Development, AI Solutions for Business, Machine Learning Integration, Custom Chatbot Development, Predictive Analytics Tools, Natural Language Processing (NLP), AI-powered Automation, Data Science Consulting, Computer Vision Solutions, AI Model Training, Artificial Intelligence Startup India, Generative AI Development, Business Intelligence (BI) Tools, AI Software Engineering, Deep Learning Solutions, Automated Business Workflows, IT Consulting Services, Digital Strategy Consulting, Cloud Computing Solutions, Software Outsourcing India, Hire Dedicated Developers, Custom ERP Development, CRM Software Solutions, Software as a Service (SaaS) Development, Enterprise Software Engineering, Digital Product Design, Scalable Tech Solutions, Software Architecture Design, Product Management Services, Quality Assurance & Testing, Agile Development Agency, SEO Services for Small Business, Local SEO Experts Amroha, Search Engine Marketing (SEM), Technical SEO Audit, Keyword Research Services, On-page SEO Optimization, Content Marketing Strategy, Link Building Services, Organic Traffic Growth, Google Ranking Services, How to build a custom CRM for business, Best agency for AI automation in India, Cost of website development in Amroha, Professional software developers for hire, Transform business with AI solutions, Custom web application for startups, Secure cloud storage solutions for business, Reliable software partner in Uttar Pradesh, User-friendly mobile app design, Automate manual tasks with software, Modernizing legacy software systems, Custom database management solutions, Scalable web architecture for e-commerce, AmrDevs tech blog and insights, Innovative software engineering AmrDevs, Er. Nadeem Ali, Er Nadeem Ali Amrohvi, Nadeem Ali
+{% endblock %}
+
+{% load static %}
+
 {% block body %}
-        <!-- Modal Search Start -->
         <div class="modal fade" id="searchModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
             <div class="modal-dialog modal-fullscreen">
                 <div class="modal-content rounded-0">
                     <div class="modal-header">
-                        <h4 class="modal-title mb-0" id="exampleModalLabel">Search by keyword</h4>
+                        <h4 class="modal-title mb-0" id="exampleModalLabel">Search AmrDevs Solutions</h4>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body d-flex align-items-center">
                         <div class="input-group w-75 mx-auto d-flex">
-                            <input type="search" class="form-control p-3" placeholder="keywords" aria-describedby="search-icon-1">
+                            <input type="search" class="form-control p-3" placeholder="Search for AI, Web, or Mobile services..." aria-describedby="search-icon-1">
                             <span id="search-icon-1" class="input-group-text p-3"><i class="fa fa-search"></i></span>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Modal Search End -->
-
-        <!-- Dynamic Carousel Start -->
         <div class="header-carousel owl-carousel">
             {% for item in carousel %}
 
             {% if forloop.counter|divisibleby:3 %}
             <div class="header-carousel-item">
             <div class="header-carousel-item-img-3">
- 
                 <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
-                 class="img-fluid w-100" alt="Image"
+                 class="img-fluid w-100" alt="{{ item.title }} - AmrDevs Software Solutions"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
-
             </div>
             <div class="carousel-caption my-3">
                 <div class="carousel-caption-inner text-center text-md-end p-3 p-md-5"
@@ -49,15 +53,11 @@ AmrDevs
                     {{item.description}}
                 </p>
                 <div class="d-flex justify-content-center justify-content-md-end gap-2 flex-wrap">
-                    <a class="btn btn-primary rounded-pill"
-                       href="tel:{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    <a class="btn btn-primary rounded-pill" href="tel:{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fas fa-phone-alt me-2"></i> Let's Talk
                     </a>
-                    <a class="btn btn-dark rounded-pill hover-effect"
-                       href="https://wa.me/{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    <a class="btn btn-dark rounded-pill hover-effect" href="https://wa.me/{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fab fa-whatsapp me-2"></i> WhatsApp
                     </a>
                 </div>
                 </div>
@@ -68,9 +68,8 @@ AmrDevs
             <div class="header-carousel-item mx-auto">
             <div class="header-carousel-item-img-2">
                 <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
-                 class="img-fluid w-100" alt="Image"
+                 class="img-fluid w-100" alt="{{ item.title }} | AmrDevs Services"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
-
             </div>
             <div class="carousel-caption">
                 <div class="carousel-caption-inner text-center p-3 p-md-5"
@@ -84,15 +83,11 @@ AmrDevs
                     {{item.description}}
                 </p>
                 <div class="d-flex justify-content-center gap-2 flex-wrap">
-                    <a class="btn btn-primary rounded-pill"
-                       href="tel:{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    <a class="btn btn-primary rounded-pill" href="tel:{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fas fa-phone-alt me-2"></i> Let's Talk
                     </a>
-                    <a class="btn btn-dark rounded-pill hover-effect"
-                       href="https://wa.me/{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    <a class="btn btn-dark rounded-pill hover-effect" href="https://wa.me/{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fab fa-whatsapp me-2"></i> WhatsApp
                     </a>
                 </div>
                 </div>
@@ -103,7 +98,7 @@ AmrDevs
             <div class="header-carousel-item">
             <div class="header-carousel-item-img-1">
                 <img src="{% if item.image_url %}{{item.image_url}}{% elif item.image %}{{item.image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
-                 class="img-fluid w-100" alt="Image"
+                 class="img-fluid w-100" alt="{{ item.title }} - Custom Software by AmrDevs"
                  style="width:100%; height:clamp(260px,40vh,720px); object-fit:cover;">
             </div>
             <div class="carousel-caption">
@@ -111,109 +106,69 @@ AmrDevs
                  style="max-width:1340px; margin-inline:auto;
                     background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
                     border-radius:10px;">
-                <h1 class="mb-3 fadeInUp animate__animated"
-                    data-animation="fadeInUp" data-delay="1.3s"
-                    style="color:#fff; line-height:1.05; font-size:clamp(1.6rem,5.8vw,3.8rem); animation-delay: 1.3s;">
+                <h1 class="mb-3 fadeInUp animate__animated" data-animation="fadeInUp" data-delay="1.3s" style="color:#fff; line-height:1.05; font-size:clamp(1.6rem,5.8vw,3.8rem); animation-delay: 1.3s;">
                     {{item.title}}
                 </h1>
-                <p class="mb-4 fadeInUp animate__animated"
-                   data-animation="fadeInUp" data-delay="1.5s"
-                   style="color:#f1f1f1; font-size:clamp(.95rem,2.4vw,1.25rem); animation-delay: 1.5s;">
+                <p class="mb-4 fadeInUp animate__animated" data-animation="fadeInUp" data-delay="1.5s" style="color:#f1f1f1; font-size:clamp(.95rem,2.4vw,1.25rem); animation-delay: 1.5s;">
                     {{item.description}}
                 </p>
                 <div class="d-flex justify-content-center justify-content-md-start gap-2 flex-wrap">
-                    <a class="btn btn-primary rounded-pill"
-                       href="tel:{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fas fa-phone-alt me-2"></i> Let's Talk
+                    <a class="btn btn-primary rounded-pill" href="tel:{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fas fa-phone-alt me-2"></i> Let's Talk
                     </a>
-                    <a class="btn btn-dark rounded-pill hover-effect"
-                       href="https://wa.me/{{ config.phone }}"
-                       style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
-                    <i class="fab fa-whatsapp me-2"></i> WhatsApp
+                    <a class="btn btn-dark rounded-pill hover-effect" href="https://wa.me/{{ config.phone }}" style="padding:clamp(.45rem,.9vw,.85rem) clamp(.9rem,2.2vw,1.8rem); font-size:clamp(.85rem,1.8vw,1rem);">
+                        <i class="fab fa-whatsapp me-2"></i> WhatsApp
                     </a>
                 </div>
                 </div>
             </div>
             </div>
             {% endif %}
-
-            
             {% endfor %}
         </div>
-        <!-- Dynamic Carousel End -->
-
-
-        <!-- About Start -->
         {% include 'main/components/about_section.html' %}
-        <!-- About End -->
-
-
-        <!-- Dynamic Services Start -->
         {% include 'main/components/service_carousel.html' %}
-        <!--Dynamic Services End -->
-
-        <!--Dynamic  Project Start -->
         {% include 'main/components/project_content.html' %}
-        <!-- Dynamic Project End -->
-
-
-        <!-- Dynamic Blog Start -->
         <div class="container-fluid blog pb-5">
             <div class="container pb-5">
                 <div class="text-center mx-auto pb-5 wow fadeInUp" data-wow-delay="0.1s" style="max-width: 800px;">
-                    <h4 class="text-primary">Our Blogs</h4>
-                    <h1 class="display-4">Latest Articles & News from the Blogs</h1>
+                    <h4 class="text-primary">AmrDevs Blog</h4>
+                    <h1 class="display-4">Latest Tech Articles & Business Insights</h1>
                 </div>
                 <div class="row g-4 justify-content-center">
                     {% if blog %}
                         {% for item in blog %}
                     <div class="col-md-6 col-lg-6 col-xl-4 wow fadeInUp" data-wow-delay="0.1s">
                         <div class="blog-item bg-light rounded p-4" style="background-image: url('{% static 'img/bg.png' %}');">
-                            
                             <div class="mb-4">
                                 <h4 class="text-primary mb-2">{{item.type}}</h4>
                                 <div class="d-flex justify-content-between">
-                                    <p class="mb-0"><span class="text-dark fw-bold">On</span> {{ item.published_date|date:"M d, Y" }}</p>
-                                    {% comment %} <p class="mb-0"><span class="text-dark fw-bold">By</span> {{item.author.first_name}}</p> {% endcomment %}
+                                    <p class="mb-0"><span class="text-dark fw-bold">Published on</span> {{ item.published_date|date:"M d, Y" }}</p>
                                 </div>
                             </div>
                             <div class="project-img">
                                 <img src="{% if item.cover_image_url %}{{item.cover_image_url}}{% elif item.cover_image %}{{item.cover_image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
-                                 class="img-fluid w-100 rounded" alt="Image">
+                                 class="img-fluid w-100 rounded" alt="{{ item.title }} | AmrDevs Tech Insights">
                                 <div class="blog-plus-icon">
                                     <a href="{% if item.cover_image_url %}{{item.cover_image_url}}{% elif item.cover_image %}{{item.cover_image.url}}{% else %}{% static 'img/default_carousel.jpg' %}{% endif %}"
-                                     data-lightbox="blog-1" class="btn btn-primary btn-md-square rounded-pill"><i class="fas fa-plus fa-1x"></i></a>
+                                     data-lightbox="blog-{{ item.id }}" class="btn btn-primary btn-md-square rounded-pill"><i class="fas fa-plus fa-1x"></i></a>
                                 </div>
                             </div>
                             <div class="my-4">
-                                <a href="#" class="h4">{{item.title}}</a>
+                                <a href="#" class="h4 d-block">{{item.title}}</a>
                             </div>
-                            {% comment %} <a class="btn btn-primary rounded-pill py-2 px-4" href="#">Explore More</a> {% endcomment %}
                         </div>
                     </div>
                     {% endfor %}
-                    {%else%}
+                    {% else %}
                     <div class="col-12">
-                        <h4 class="display-7 text-center"> No Blogs Found, Please add first !!! </h4>
+                        <h4 class="display-7 text-center">Stay tuned for upcoming articles!</h4>
+                    </div>
                     {% endif %}
                 </div>
             </div>
         </div>
-        <!-- Dynamic Blog End -->
-
-
-        <!--Dynamic  Team Start -->
         {% include 'main/components/team_section.html' %}
-        <!-- Team End -->
-
-
-        <!-- Dynamic Reviews Start -->
         {% include 'main/components/review_carousel.html' %}
-        <!-- Dynamic Reviews End -->
-
-
-        <!-- FAQ Start -->
         {% include 'main/components/faq_content.html' %}
-        <!-- FAQ End -->
-{% endblock %}
+        {% endblock %}

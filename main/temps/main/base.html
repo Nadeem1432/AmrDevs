@@ -3,27 +3,39 @@
     {% load static %}
     <head>
         <meta charset="utf-8">
-        <title>{% block title %} {% endblock %}</title>
+        
+        <title>{% block title %}AmrDevs | Software Development Company in Amroha | Web & AI Solutions{% endblock %}</title>
+        
         <meta content="width=device-width, initial-scale=1.0" name="viewport">
-        <meta content="" name="keywords">
-        <meta content="" name="description">
+        
+        <meta name="keywords" content="{% block meta_keywords %}Software Development in Amroha, Web Development, Mobile App Development, AI Solutions, IT Consulting Amroha Uttar Pradesh, AmrDevs, Software Development Company in Amroha, Best Web Developers in Amroha, IT Services in Amroha, Website Designing Amroha, Mobile App Development Amroha, Top Tech Agency Amroha, Software Solutions Uttar Pradesh, Digital Transformation Amroha, AmrDevs Amroha Office, Custom Software Amroha, Local IT Experts Uttar Pradesh, Amroha Software Startup, Best IT Company in Moradabad Division, Software Agency near Amroha Railway Station, Tech Support Services Amroha, Full-stack Web Development, Custom Website Building, Django Web Development Services, React.js Developers India, Responsive Web Design, E-commerce Website Development, Progressive Web Apps (PWA), Corporate Website Design, API Integration Services, Web Portal Development, CMS Development Services, Front-end Development Agency, Back-end Engineering Solutions, Website Maintenance Services, High-performance Web Solutions, Android App Development, iOS App Development, Cross-platform Mobile Apps, Flutter App Development, React Native Developers, Mobile UI/UX Design, Custom Mobile Applications, Hybrid App Solutions, Enterprise Mobile Apps, Mobile App Consulting, App Store Optimization (ASO), Native Android Development, Mobile App Maintenance, MVP Development for Startups, Mobile Backend Development, AI Solutions for Business, Machine Learning Integration, Custom Chatbot Development, Predictive Analytics Tools, Natural Language Processing (NLP), AI-powered Automation, Data Science Consulting, Computer Vision Solutions, AI Model Training, Artificial Intelligence Startup India, Generative AI Development, Business Intelligence (BI) Tools, AI Software Engineering, Deep Learning Solutions, Automated Business Workflows, IT Consulting Services, Digital Strategy Consulting, Cloud Computing Solutions, Software Outsourcing India, Hire Dedicated Developers, Custom ERP Development, CRM Software Solutions, Software as a Service (SaaS) Development, Enterprise Software Engineering, Digital Product Design, Scalable Tech Solutions, Software Architecture Design, Product Management Services, Quality Assurance & Testing, Agile Development Agency, SEO Services for Small Business, Local SEO Experts Amroha, Search Engine Marketing (SEM), Technical SEO Audit, Keyword Research Services, On-page SEO Optimization, Content Marketing Strategy, Link Building Services, Organic Traffic Growth, Google Ranking Services, How to build a custom CRM for business, Best agency for AI automation in India, Cost of website development in Amroha, Professional software developers for hire, Transform business with AI solutions, Custom web application for startups, Secure cloud storage solutions for business, Reliable software partner in Uttar Pradesh, User-friendly mobile app design, Automate manual tasks with software, Modernizing legacy software systems, Custom database management solutions, Scalable web architecture for e-commerce, AmrDevs tech blog and insights, Innovative software engineering AmrDevs, Er. Nadeem Ali, Er Nadeem Ali Amrohvi, Nadeem Ali{% endblock %}">
+        <meta name="description" content="{% block meta_description %}AmrDevs is a premier software development agency specializing in Web, Mobile, and AI/ML solutions. Based in Amroha, we help businesses scale with custom technology.{% endblock %}">
+        <meta name="author" content="AmrDevs">
 
-        <!-- Google Web Fonts -->
+        <link rel="canonical" href="{{ request.build_absolute_uri }}">
+
+        <meta property="og:type" content="website">
+        <meta property="og:url" content="{{ request.build_absolute_uri }}">
+        <meta property="og:title" content="{% block og_title %}AmrDevs | Building the Future of Software{% endblock %}">
+        <meta property="og:description" content="{% block og_description %}Transform your business with bespoke software, mobile apps, and automated tools by AmrDevs.{% endblock %}">
+        <meta property="og:image" content="{% if config.favicon_url %}{{ config.favicon_url }}{% elif config.logo %}{{ config.logo.url }}{% else %}{% static 'img/og-image.jpg' %}{% endif %}">
+
+        <meta name="twitter:card" content="summary_large_image">
+        <meta name="twitter:title" content="AmrDevs | Software & AI Agency">
+        <meta name="twitter:description" content="Custom software solutions built for scale.">
+
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;500;600;700&family=Roboto:wght@400;500;700&display=swap" rel="stylesheet"> 
 
-        <!-- Icon Font Stylesheet -->
         <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.4/css/all.css"/>
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
 
-        <!-- Libraries Stylesheet -->
         <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
         <link href="{% static 'lib/animate/animate.min.css' %}" rel="stylesheet">
         <link href="{% static 'lib/owlcarousel/assets/owl.carousel.min.css' %}" rel="stylesheet">
         <link href="{% static 'lib/lightbox/css/lightbox.min.css' %}" rel="stylesheet">
 
-        <!-- Favicon -->
         {% if config.favicon_url %}
             <link href="{{ config.favicon_url }}" rel="icon">
         {% elif config.favicon %}
@@ -31,116 +43,52 @@
         {% else %}
             <link href="{% static 'default_favicon.ico' %}" rel="icon">
         {% endif %}
-        <!-- Customized Bootstrap Stylesheet -->
+
         <link href="{% static 'css/bootstrap.min.css' %}" rel="stylesheet">
 
-        <!-- Template Stylesheet -->
         <link href="{% static 'css/style.css' %}" rel="stylesheet">
-        <!-- sweet alert -->
         <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.min.css'></link>
         <script src="https://cdn.jsdelivr.net/npm/sweetalert2@7.12.15/dist/sweetalert2.all.min.js"></script>
+        
         <style>
-        /* Make sure captions have safe space from edges */
         .carousel-caption {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            padding: clamp(1rem, 4vw, 3rem);
-            box-sizing: border-box;
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            display: flex; align-items: center; justify-content: center;
+            padding: clamp(1rem, 4vw, 3rem); box-sizing: border-box;
         }
-
-        /* Inner container with breathing room */
         .carousel-caption-inner {
-            width: 100%;
-            max-width: 1240px;
-            margin-inline: auto;
+            width: 100%; max-width: 1240px; margin-inline: auto;
             background: linear-gradient(90deg, rgba(0,0,0,0.45), rgba(0,0,0,0.15));
-            border-radius: 12px;
-            padding: clamp(1rem, 3vw, 2.5rem);
-            box-sizing: border-box;
+            border-radius: 12px; padding: clamp(1rem, 3vw, 2.5rem); box-sizing: border-box;
         }
-
-        /* Make sure text never touches edges */
-        .carousel-caption-inner h1,
-        .carousel-caption-inner p {
+        .carousel-caption-inner h1, .carousel-caption-inner p {
             margin-left: clamp(0.5rem, 1.5vw, 1rem);
             margin-right: clamp(0.5rem, 1.5vw, 1rem);
         }
-
-        /* Optional: reduce text wrapping overflow on smaller screens */
         @media (max-width: 768px) {
-            .carousel-caption-inner {
-                padding: 1.5rem;
-            }
-            .carousel-caption-inner h1 {
-                font-size: clamp(1.4rem, 6vw, 2rem);
-            }
+            .carousel-caption-inner { padding: 1.5rem; }
+            .carousel-caption-inner h1 { font-size: clamp(1.4rem, 6vw, 2rem); }
         }
         </style>
     </head>
 
     <body>
-
-        <!-- Spinner Start -->
         <div id="spinner" class="show bg-white position-fixed translate-middle w-100 vh-100 top-50 start-50 d-flex align-items-center justify-content-center">
             <div class="spinner-border text-primary" style="width: 3rem; height: 3rem;" role="status">
                 <span class="sr-only">Loading...</span>
             </div>
         </div>
-        <!-- Spinner End -->
-
-
-        <!-- Topbar Start -->
-        {% comment %} <div class="container-fluid topbar px-0 d-none d-lg-block">
-            <div class="container px-0">
-                <div class="row gx-0 align-items-center" style="height: 45px;">
-                    <div class="col-lg-8 text-center text-lg-start mb-lg-0">
-                        <div class="d-flex flex-wrap">
-                            <a href="https://www.google.com/maps/search/?api=1&query={{ config.address|urlencode }}" class="text-muted me-4" target="_blank">
-                                <i class="fas fa-map-marker-alt text-primary me-2"></i>{{ config.address|default:"Find A Place" }}
-                            </a>
-                            <a href="tel:{{ config.phone|default:'+01234567890' }}" class="text-muted me-4">
-                                <i class="fas fa-phone-alt text-primary me-2"></i>{{ config.phone|default:"+01234567890" }}
-                            </a>
-                            <a href="mailto:{{ config.email|default:'Example@gmail.com' }}" class="text-muted me-0">
-                                <i class="fas fa-envelope text-primary me-2"></i>{{ config.email|default:"Example@gmail.com" }}
-                            </a>
-                            
-                        </div>
-                    </div>
-                    <div class="col-lg-4 text-center text-lg-end">
-                        <div class="d-flex align-items-center justify-content-end">
-                            <a href="{{config.facebook}}" class="btn btn-primary btn-square rounded-circle nav-fill me-3"><i class="fab fa-facebook-f text-white"></i></a>
-                            <a href="{{config.twitter}}" class="btn btn-primary btn-square rounded-circle nav-fill me-3"><i class="fab fa-twitter text-white"></i></a>
-                            <a href="{{config.instagram}}" class="btn btn-primary btn-square rounded-circle nav-fill me-3"><i class="fab fa-instagram text-white"></i></a>
-                            <a href="{{config.linkedin}}" class="btn btn-primary btn-square rounded-circle nav-fill me-0"><i class="fab fa-linkedin-in text-white"></i></a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div> {% endcomment %}
-        <!-- Topbar End -->
-
-
-        <!-- Navbar & Hero Start -->
         <div class="container-fluid sticky-top px-0">
-            <div class="position-absolute bg-dark" style="left: 0; top: 0; width: 100%; height: 100%;">
-            </div>
-            {% comment %} <div class="container px-0"> {% endcomment %}
+            <div class="position-absolute bg-dark" style="left: 0; top: 0; width: 100%; height: 100%;"></div>
             <div class="px-0">
                 <nav class="navbar navbar-expand-lg navbar-dark bg-white py-0 px-4">
                     <a href="{% url 'index' %}" class="navbar-brand p-0">
                         {% if config.logo_url %}
-                            <img src="{{config.logo_url}}" alt="Logo" style="height:70px;width:120px;">
+                            <img src="{{config.logo_url}}" alt="AmrDevs - Software Development Company Logo" style="height:70px;width:120px;">
                         {% elif config.logo %}
-                            <img src="{{config.logo.url}}" alt="Logo" style="height:70px;width:120px;">
+                            <img src="{{config.logo.url}}" alt="AmrDevs Logo" style="height:70px;width:120px;">
                         {% else %}
-                            <h1 class="text-primary m-0"><i class="fas fa-donate me-3"></i>{{config.short_title|default:"Add Title"}}</h1>
+                            <h1 class="text-primary m-0"><i class="fas fa-donate me-3"></i>{{config.short_title|default:"AmrDevs"}}</h1>
                         {% endif %}
                     </a>
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse">
@@ -158,22 +106,16 @@
                 </nav>
             </div>
         </div>
-        <!-- Navbar & Hero End -->
         {% block body %}
+        {% endblock %}
 
-        {%endblock%}
-
-
-        <!-- Footer Start -->
         <div class="container-fluid footer py-5 wow fadeIn" data-wow-delay="0.2s">
             <div class="container py-5">
                 <div class="row g-5">
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
-                            <div class="footer-item">
-                                <h4 class="text-white mb-4">Newsletter</h4>
-                                <p class="mb-3">{{config.newsletter|default:"Dolor amet sit justo amet elitr clita ipsum elitr est.Lorem ipsum dolor sit amet, consectetur adipiscing elit consectetur adipiscing elit."}}</p>
-                            </div>
+                            <h4 class="text-white mb-4">Newsletter</h4>
+                            <p class="mb-3">{{config.newsletter|default:"Stay updated with AmrDevs for the latest in AI and Web development."}}</p>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
@@ -190,94 +132,56 @@
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item d-flex flex-column">
                             <h4 class="text-white mb-4">Contact Info</h4>
-                            <a href=""><i class="fa fa-map-marker-alt me-2"></i>  {% if config.city %} {{ config.city }} {{ config.state }} {{ config.pincode }} {% else %} Add Adress {% endif %} </a>
-                            <a href=""><i class="fas fa-envelope me-2"></i> {{config.email|default:"Add Email"}}</a>
-                            <a href=""><i class="fas fa-phone me-2"></i> {{config.phone|default:"Add Phone Number"}}</a>
-                            <div class="d-flex align-items-center">
-                                <a class="btn btn-light btn-md-square me-2" href="{{config.facebook}}"><i class="fab fa-facebook-f"></i></a>
-                                <a class="btn btn-light btn-md-square me-2" href="{{config.twitter}}"><i class="fab fa-twitter"></i></a>
-                                <a class="btn btn-light btn-md-square me-2" href="{{config.instagram}}"><i class="fab fa-instagram"></i></a>
-                                <a class="btn btn-light btn-md-square me-0" href="{{config.linkedin}}"><i class="fab fa-linkedin-in"></i></a>
-                            </div>
+                            <a href="#"><i class="fa fa-map-marker-alt me-2"></i> {% if config.city %} {{ config.city }}, {{ config.state }} {% else %} Amroha, Uttar Pradesh {% endif %}</a>
+                            <a href="mailto:{{config.email}}"><i class="fas fa-envelope me-2"></i> {{config.email|default:"tech.amrdevs@gmail.com"}}</a>
+                            <a href="tel:{{config.phone}}"><i class="fas fa-phone me-2"></i> {{config.phone|default:"+91 9315429184"}}</a>
                         </div>
                     </div>
                     <div class="col-md-6 col-lg-6 col-xl-3">
                         <div class="footer-item-post d-flex flex-column">
-                            <h4 class="text-white mb-4">Popular Post</h4>
-
-
-                            {% comment %} <div class="d-flex flex-column mb-3">
-                                <p class="text-uppercase text-primary mb-2">Investment</p>
-                                <a href="#" class="text-body">Revisiting Your Investment & Distribution Goals</a>
-                            </div>
-                            <div class="d-flex flex-column mb-3">
-                                <p class="text-uppercase text-primary mb-2">Business</p>
-                                <a href="#" class="text-body">Dimensional Fund Advisors Interview with Director</a>
-                            </div> {% endcomment %}
+                            <h4 class="text-white mb-4">Popular Posts</h4>
                             {% for post in posts %}
                             <div class="d-flex flex-column mb-3">
-                                {% comment %} <p class="text-uppercase text-primary mb-2">Blog</p> {% endcomment %}
-                                
-                                <a  class="text-body">{{ post.title }}</a> 
+                                <a href="#" class="text-body">{{ post.title }}</a> 
                             </div>
                             {% endfor %}
-                            <div class="footer-btn text-start">
-                                {% comment %} <a href="#" class="btn btn-light rounded-pill px-4">View All Post <i class="fa fa-arrow-right ms-1"></i></a> {% endcomment %}
-                                <a class="btn btn-light rounded-pill px-4">View All Post <i class="fa fa-arrow-right ms-1"></i></a>
-                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Footer End -->
-
-        
-        <!-- Copyright Start -->
         <div class="container-fluid copyright py-4">
             <div class="container">
                 <div class="row g-4 align-items-center">
-                    
                     <div class="col-md-6 text-center text-md-start mb-md-0">
-                        
-                        <span class="text-body"><a href="{% url 'index' %}" class="border-bottom text-primary"><i class="fas fa-copyright text-light me-2">{% now "Y" %}</i>{{config.short_title|default:"Your Site Name"}}</a>, All right reserved.</span>
+                        <span class="text-body"><a href="{% url 'index' %}" class="border-bottom text-primary"><i class="fas fa-copyright text-light me-2"></i>{% now "Y" %} {{config.short_title|default:"AmrDevs"}}</a>, All rights reserved.</span>
                     </div>
                     <div class="col-md-6 text-center text-md-end text-body">
-                        Developer- <a class="border-bottom text-primary" {% if config.linkedin  %} href="{{config.linkedin}} {% endif %}"> {% if config.created_by %} {{ config.created_by.first_name|add:" " }}{{ config.created_by.last_name }} {% else %} {{config.short_title}}  {% endif %} </a>
+                        Developer- <a class="border-bottom text-primary" href="#">{% if config.created_by %} {{ config.created_by.get_full_name }} {% else %} AmrDevs Team {% endif %}</a>
                     </div>
                 </div>
             </div>
         </div>
-        <!-- Copyright End -->
-
-
-        <!-- Back to Top -->
         <a href="#" class="btn btn-primary btn-lg-square back-to-top"><i class="fa fa-arrow-up"></i></a>   
 
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+        <script src="{% static 'lib/wow/wow.min.js' %}"></script>
+        <script src="{% static 'lib/easing/easing.min.js' %}"></script>
+        <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
+        <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
+        <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
+        <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
+        <script src="{% static 'js/main.js' %}"></script>
         
-    <!-- JavaScript Libraries -->
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="{% static 'lib/wow/wow.min.js' %}"></script>
-    <script src="{% static 'lib/easing/easing.min.js' %}"></script>
-    <script src="{% static 'lib/waypoints/waypoints.min.js' %}"></script>
-    <script src="{% static 'lib/counterup/counterup.min.js' %}"></script>
-    <script src="{% static 'lib/owlcarousel/owl.carousel.min.js' %}"></script>
-    <script src="{% static 'lib/lightbox/js/lightbox.min.js' %}"></script>
-    
+        <script>
+            {% if popup == "submitted" %}
+                swal("Query Sent Successfully.", "{{ message }}", "success");
+            {% elif popup == "failed" %}
+                swal("Error", "Something went wrong", "error");
+            {% endif %}
+        </script>
 
-    <!-- Template Javascript -->
-    <script src="{% static 'js/main.js' %}"></script>
-    <script>
-        {% if popup == "submitted" %}
-            swal("Query Sent Successfully.", "{{ message }}", "success");
-        {% elif popup == "failed" %}
-            swal("Error", "Something went wrong", "error");
-        {% endif %}
-    </script>
-{% block extra_scripts %}
-
-{% endblock %}
+        {% block extra_scripts %}{% endblock %}
     </body>
-
 </html>
