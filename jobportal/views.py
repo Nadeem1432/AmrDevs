@@ -6,6 +6,8 @@ from django.conf import settings
 from django.urls import reverse
 from .models import *
 from django.contrib.auth.decorators import login_required
+from django.http import JsonResponse
+import uuid
 
 # Create your views here.
 def home(request):
@@ -211,10 +213,65 @@ from common.utils import background_email_task
 #     }
 #     return render(request, 'jobportal/send_mail.html', context)
 
-from django.http import JsonResponse
-import uuid
+
+# NOTE :  Its working code but we are using the above code with threading for better performance
+# @login_required(login_url='/')
+# def send_mail(request):
+#     if request.method == 'POST':
+#         subject = request.POST.get('subject', '').strip()
+#         cover_letter = request.POST.get('cover_letter', '').strip()
+#         recipients_raw = request.POST.get('recipients', '')
+#         recipients = list(set([r.strip() for r in recipients_raw.split(',') if r.strip()]))
+
+#         uploaded_file = request.FILES.get('resume_file')
+#         selected_resume_id = request.POST.get('resume_select')
+        
+#         resume_path = None
+#         original_filename = "Resume.pdf"
+#         is_temp_file = False
+
+#         # Determine file path AND original clean name
+#         if uploaded_file:
+#             original_filename = uploaded_file.name
+#             filename = f"tmp_{uuid.uuid4()}_{original_filename}"
+#             saved_path = default_storage.save(f'temp_resumes/{filename}', ContentFile(uploaded_file.read()))
+#             resume_path = os.path.join(settings.MEDIA_ROOT, saved_path)
+#             is_temp_file = True
+#         elif selected_resume_id:
+#             res_obj = Resume.objects.get(pk=selected_resume_id)
+#             resume_path = res_obj.file.path
+#             original_filename = os.path.basename(res_obj.file.name)
+#         else:
+#             res_obj = Resume.objects.last()
+#             if res_obj:
+#                 resume_path = res_obj.file.path
+#                 original_filename = os.path.basename(res_obj.file.name)
+
+#         job_id = str(uuid.uuid4())
+#         provider_settings = settings.EMAIL_PROVIDERS.get("jobportal", {})
+        
+#         BulkJobAppliedLog.objects.create(job_id=job_id, total_applications=len(recipients), sender_email=provider_settings["USER"])
+
+#         thread = threading.Thread(
+#             target=background_email_task,
+#             args=(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
+#         )
+#         thread.start()
+
+#         return render(request, 'jobportal/success.html', {
+#             'job_id': job_id, 
+#             'count': len(recipients),
+#             'send_another_mail': f'<a href="{reverse("send_mail")}">Send another batch</a>'
+#         })
+
+#     context = {
+#         'resumes': list(Resume.objects.filter(status=True).values('name','id')),
+#         'subjects': list(EmailTemplate.objects.all().values('subject','body','id'))
+#     }
+#     return render(request, 'jobportal/send_mail.html', context)
 
 
+# NOTE :  this function is used to celery so we are using the below code with celery for better performance and scalability
 @login_required(login_url='/')
 def send_mail(request):
     if request.method == 'POST':
@@ -252,12 +309,13 @@ def send_mail(request):
         
         BulkJobAppliedLog.objects.create(job_id=job_id, total_applications=len(recipients), sender_email=provider_settings["USER"])
 
-        thread = threading.Thread(
-            target=background_email_task,
-            args=(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
-        )
-        thread.start()
-
+        # thread = threading.Thread(
+        #     target=background_email_task,
+        #     args=(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
+        # )
+        # thread.start()
+        from common.tasks import background_email_task
+        background_email_task.delay(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
         return render(request, 'jobportal/success.html', {
             'job_id': job_id, 
             'count': len(recipients),
@@ -269,6 +327,8 @@ def send_mail(request):
         'subjects': list(EmailTemplate.objects.all().values('subject','body','id'))
     }
     return render(request, 'jobportal/send_mail.html', context)
+
+
 
 def check_job_status(request, job_id):
     try:

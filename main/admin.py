@@ -22,7 +22,19 @@ admin.site.site_title = "AmrDevs Admin Portal"
 admin.site.index_title = "Welcome to AmrDevs Admin Portal"
 admin.site.site_header = "AmrDevs Admin"
 
+MY_APPS = {
+    "jobportal",
+    "accounts",
+    "core",
+}
+
 for model in all_models:
+
+    app_label = model._meta.app_label
+    #Skip third-party & Django contrib apps
+    if app_label not in MY_APPS:
+        continue
+
     try:
         class Admin(admin.ModelAdmin):
             list_display = [field.name for field in model._meta.fields]
