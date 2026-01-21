@@ -54,7 +54,9 @@ CUSTOM_APPS = [     'main',
                     'common'
                  ] 
 THIRD_PARTY_APPS = [    'django_extensions',
-                        'tinymce'
+                        'tinymce',
+                        "django_celery_results",
+
                         ]
 INSTALLED_APPS = DEFAULT_APPS + CUSTOM_APPS + THIRD_PARTY_APPS
 
@@ -116,8 +118,8 @@ else:
     DATABASES = {
         'default': {
             'ENGINE': 'django.db.backends.sqlite3',
-            'NAME': BASE_DIR / 'db.sqlite3',
-            # 'NAME': BASE_DIR / 'db3.sqlite3',
+            # 'NAME': BASE_DIR / 'db.sqlite3',
+            'NAME': BASE_DIR / 'db4.sqlite3',
             }
     }
     print("✅ Development database settings applied.")
@@ -225,3 +227,16 @@ SUPABASE_BUCKET = config('SUPABASE_BUCKET')
 
 # Google Maps API Key
 GOOGLE_MAPS_API_KEY = config('GOOGLE_MAPS_API_KEY', default='')
+
+# Celery Configuration
+# CELERY_BROKER_URL = "redis://127.0.0.1:6379/0"
+CELERY_BROKER_URL = config("REDIS_URL")
+
+CELERY_ACCEPT_CONTENT = ["json"]
+CELERY_TASK_SERIALIZER = "json"
+CELERY_RESULT_BACKEND = "django-db"
+CELERY_TIMEZONE = "UTC"
+
+# Important for Upstash/SSL:
+CELERY_REDIS_BACKEND_USE_SSL = {'ssl_cert_reqs': 'none'}
+
