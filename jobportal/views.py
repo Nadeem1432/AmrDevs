@@ -314,7 +314,7 @@ def send_mail(request):
         #     args=(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
         # )
         # thread.start()
-        from common.tasks import background_email_task
+        from .tasks import background_email_task
         background_email_task.delay(job_id, subject, cover_letter, recipients, provider_settings["USER"], resume_path, original_filename, is_temp_file, provider_settings)
         return render(request, 'jobportal/success.html', {
             'job_id': job_id, 
